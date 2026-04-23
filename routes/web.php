@@ -53,25 +53,50 @@ Route::post('/email/verification-notification', function (Request $request) {
 | AUTH + VERIFIED
 |--------------------------------------------------------------------------
 */
+// Route::middleware(['auth', 'verified'])->group(function () {
+
+//     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+//     // ✅ DASHBOARD
+//     Route::get('/home', [PiutangController::class, 'dashboard'])->name('home');
+
+//     // ✅ RESOURCE (HANYA 1 SUMBER piutang.index)
+//     Route::resource('piutang', PiutangController::class);
+
+//     // TAMBAHAN
+//     Route::patch('/piutang/{id}/lunas', [PiutangController::class, 'markLunas'])->name('piutang.lunas');
+
+//     Route::get('/laporan', [PiutangController::class, 'laporan'])->name('laporan');
+//     Route::get('/laporan-piutang-data', [PiutangController::class, 'data'])->name('laporan.data');
+//     Route::get('/laporan-piutang-pdf', [PiutangController::class, 'exportPdf'])->name('laporan.pdf');
+
+//     Route::get('/notifikasi', [PiutangController::class, 'notifikasi'])->name('notifikasi');
+
+//     Route::get('/profile', [PiutangController::class, 'profile'])->name('profile');
+//     Route::get('/profile/edit', [PiutangController::class, 'editProfile'])->name('profile.edit');
+//     Route::put('/profile/update', [PiutangController::class, 'updateProfile'])->name('profile.update');
+// });
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // ✅ DASHBOARD
-    Route::get('/home', [PiutangController::class, 'dashboard'])->name('home');
+    // HOME (dashboard)
+    Route::get('/', [PiutangController::class, 'dashboard'])->name('home');
 
-    // ✅ RESOURCE (HANYA 1 SUMBER piutang.index)
+    // RESOURCE PIUTANG
     Route::resource('piutang', PiutangController::class);
 
-    // TAMBAHAN
     Route::patch('/piutang/{id}/lunas', [PiutangController::class, 'markLunas'])->name('piutang.lunas');
 
+    // LAPORAN
     Route::get('/laporan', [PiutangController::class, 'laporan'])->name('laporan');
     Route::get('/laporan-piutang-data', [PiutangController::class, 'data'])->name('laporan.data');
     Route::get('/laporan-piutang-pdf', [PiutangController::class, 'exportPdf'])->name('laporan.pdf');
 
+    // NOTIFIKASI
     Route::get('/notifikasi', [PiutangController::class, 'notifikasi'])->name('notifikasi');
 
+    // PROFILE
     Route::get('/profile', [PiutangController::class, 'profile'])->name('profile');
     Route::get('/profile/edit', [PiutangController::class, 'editProfile'])->name('profile.edit');
     Route::put('/profile/update', [PiutangController::class, 'updateProfile'])->name('profile.update');
