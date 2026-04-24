@@ -8,9 +8,7 @@ use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\AuthController;
 
 
-Route::get('/test', function () {
-    return 'TEST OK';
-});
+
 /*
 |--------------------------------------------------------------------------
 | GUEST ROUTES
