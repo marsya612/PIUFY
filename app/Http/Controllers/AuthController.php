@@ -118,34 +118,59 @@ class AuthController extends Controller
     //     return redirect()->route('verification.notice')
     //         ->with('success', 'Silakan cek email untuk verifikasi akun');
     // }
-public function register(Request $request)
-{
-    $request->validate([
-        'name' => 'required',
-        'email' => 'required|email|unique:users,email',
-        'phone' => 'required',
-        'jabatan' => 'required',
-        'password' => 'required|confirmed|min:6',
-    ]);
+    
+// public function register(Request $request)
+// {
+//     $request->validate([
+//         'name' => 'required',
+//         'email' => 'required|email|unique:users,email',
+//         'phone' => 'required',
+//         'jabatan' => 'required',
+//         'password' => 'required|confirmed|min:6',
+//     ]);
 
-    $user = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'phone' => $request->phone,
-        'jabatan' => $request->jabatan,
-        'divisi' => 'Keuangan',
-        'password' => $request->password,
-    ]);
+//     $user = User::create([
+//         'name' => $request->name,
+//         'email' => $request->email,
+//         'phone' => $request->phone,
+//         'jabatan' => $request->jabatan,
+//         'divisi' => 'Keuangan',
+//         'password' => $request->password,
+//     ]);
 
-    // ✅ LOGIN DULU
-    Auth::login($user);
+//     // ✅ LOGIN DULU
+//     Auth::login($user);
 
-    // ✅ KIRIM EMAIL
-    event(new Registered($user));
+//     // ✅ KIRIM EMAIL
+//     event(new Registered($user));
 
-    return redirect()->route('verification.notice')
-        ->with('success', 'Silakan cek email untuk verifikasi akun');
-}
+//     return redirect()->route('verification.notice')
+//         ->with('success', 'Silakan cek email untuk verifikasi akun');
+// }
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required',
+            'jabatan' => 'required',
+            'password' => 'required|confirmed|min:6',
+        ]);
+    
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'jabatan' => $request->jabatan,
+            'divisi' => 'Keuangan',
+            'password' => Hash::make($request->password), // ✅ WAJIB
+        ]);
+    
+        event(new Registered($user)); // ✅ kirim email
+    
+        return redirect()->route('login')
+            ->with('success', 'Registrasi berhasil! Cek email untuk verifikasi.');
+    }
 
     // 🔹 LOGOUT
     public function logout(Request $request)
