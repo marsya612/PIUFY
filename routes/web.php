@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
+use App\Models\User;
 use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\AuthController;
 
