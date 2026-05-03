@@ -57,8 +57,18 @@ Route::get('/email/verify', function () {
 
 
 // 🔥 STEP 1: buka halaman konfirmasi (TIDAK langsung verifikasi)
+// Route::get('/email/verify/{id}/{hash}', function ($id, $hash) {
+//     return view('auth.confirm-verify', compact('id', 'hash'));
+// })->middleware(['signed'])->name('verification.verify');
+
 Route::get('/email/verify/{id}/{hash}', function ($id, $hash) {
+
+    // 🔥 LOGINKAN USER DARI LINK
+    $user = User::findOrFail($id);
+    Auth::login($user);
+
     return view('auth.confirm-verify', compact('id', 'hash'));
+
 })->middleware(['signed'])->name('verification.verify');
 
 
