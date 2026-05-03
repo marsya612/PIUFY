@@ -111,7 +111,8 @@ document.getElementById('filterForm').addEventListener('submit', function (e) {
     const statusFilter = document.getElementById('status').value || '';
     const klien = document.getElementById('klien').value || '';
 
-    fetch(`{{ url('/laporan-piutang-data') }}?from=${from}&to=${to}&status=${statusFilter}&klien=${klien}`)
+    fetch(`{{ url('/laporan-data') }}?from=${from}&to=${to}&status=${statusFilter}&klien=${klien}`)
+    // fetch(`{{ url('/laporan-piutang-data') }}?from=${from}&to=${to}&status=${statusFilter}&klien=${klien}`)
         .then(res => res.json())
         .then(data => {
 
@@ -132,7 +133,7 @@ document.getElementById('filterForm').addEventListener('submit', function (e) {
                 const status = (item.status || '-').trim();
                 const nama = (item.nama_klien || '-').trim();
 
-                let nilai = Number(item.nilai_piutang ?? 0);
+                let nilai = Number(item.nilai_tagihan ?? 0);
                 if (isNaN(nilai)) nilai = 0;
 
                 if (!grouped[status]) grouped[status] = [];
@@ -140,7 +141,7 @@ document.getElementById('filterForm').addEventListener('submit', function (e) {
                 grouped[status].push({
                     status,
                     nama_klien: nama,
-                    nilai_piutang: nilai
+                    nilai_tagihan: nilai
                 });
             });
 
@@ -156,14 +157,14 @@ document.getElementById('filterForm').addEventListener('submit', function (e) {
                 items.forEach(item => {
 
                     subtotalQty++;
-                    subtotalNilai += item.nilai_piutang;
+                    subtotalNilai += item.nilai_tagihan;
 
                     html += `
                         <tr>
                             <td>${status}</td>
                             <td>${item.nama_klien}</td>
                             <td class="text-center">1</td>
-                            <td class="text-end">Rp${item.nilai_piutang.toLocaleString('id-ID')}</td>
+                            <td class="text-end">Rp${item.nilai_tagihan.toLocaleString('id-ID')}</td>
                         </tr>
                     `;
                 });
@@ -205,7 +206,8 @@ function exportPDF() {
     const status = document.getElementById('status').value || '';
     const klien = document.getElementById('klien').value || '';
 
-    window.open(`/laporan-piutang-pdf?from=${from}&to=${to}&status=${status}&klien=${klien}`, '_blank');
+    window.open(`/laporan-pdf?from=${from}&to=${to}&status=${status}&klien=${klien}`, '_blank');
+    // window.open(`/laporan-piutang-pdf?from=${from}&to=${to}&status=${status}&klien=${klien}`, '_blank');
 }
 </script>
 
