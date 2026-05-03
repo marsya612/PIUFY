@@ -111,8 +111,7 @@ document.getElementById('filterForm').addEventListener('submit', function (e) {
     const statusFilter = document.getElementById('status').value || '';
     const klien = document.getElementById('klien').value || '';
 
-    fetch(`{{ url('/laporan-data') }}?from=${from}&to=${to}&status=${statusFilter}&klien=${klien}`)
-    // fetch(`{{ url('/laporan-piutang-data') }}?from=${from}&to=${to}&status=${statusFilter}&klien=${klien}`)
+    fetch(`{{ url('/laporan-piutang-data') }}?from=${from}&to=${to}&status=${statusFilter}&klien=${klien}`)
         .then(res => res.json())
         .then(data => {
 
@@ -206,8 +205,7 @@ function exportPDF() {
     const status = document.getElementById('status').value || '';
     const klien = document.getElementById('klien').value || '';
 
-    window.open(`/laporan-pdf?from=${from}&to=${to}&status=${status}&klien=${klien}`, '_blank');
-    // window.open(`/laporan-piutang-pdf?from=${from}&to=${to}&status=${status}&klien=${klien}`, '_blank');
+    window.open(`/laporan-piutang-pdf?from=${from}&to=${to}&status=${status}&klien=${klien}`, '_blank');
 }
 </script>
 
