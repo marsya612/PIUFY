@@ -106,12 +106,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Http;
 
-Route::get('/test-email', function () {
-    Mail::raw('Test dari Railway', function ($msg) {
-        $msg->to('piufy.seize@gmail.com')->subject('Test Brevo');
-    });
+Route::get('/test-api-email', function () {
 
-    return 'Email dikirim';
+    $response = Http::withHeaders([
+        'api-key' => env('MAIL_PASSWORD'),
+    ])->post('https://api.brevo.com/v3/smtp/email', [
+        'sender' => [
+            'email' => env('MAIL_FROM_ADDRESS'),
+            'name' => env('MAIL_FROM_NAME'),
+        ],
+        'to' => [
+            ['email' => 'marsyandaindiyana535@gmail.com']
+        ],
+        'subject' => 'Test Email API',
+        'htmlContent' => '<h1>Berhasil kirim email 🚀</h1>',
+    ]);
+
+    return $response->body();
 });
