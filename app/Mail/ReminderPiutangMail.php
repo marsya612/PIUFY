@@ -13,30 +13,15 @@ class ReminderPiutangMail extends Mailable
     public $piutang;
     public $sisaHari;
 
-    /**
-     * Create a new message instance.
-     */
     public function __construct($piutang, $sisaHari)
     {
         $this->piutang = $piutang;
         $this->sisaHari = $sisaHari;
     }
 
-    /**
-     * Build the message.
-     */
     public function build()
     {
-        // 🔥 SUBJECT DINAMIS
-        $subject = "Pengingat Pembayaran";
-
-        if ($this->sisaHari == 7) {
-            $subject = "Reminder: 7 Hari Menuju Jatuh Tempo";
-        } elseif ($this->sisaHari == 5) {
-            $subject = "Reminder: 5 Hari Menuju Jatuh Tempo";
-        } elseif ($this->sisaHari == 3) {
-            $subject = "Reminder: 3 Hari Menuju Jatuh Tempo";
-        }
+        $subject = $this->getSubject();
 
         return $this->subject($subject)
             ->view('notifikasi')
@@ -44,5 +29,15 @@ class ReminderPiutangMail extends Mailable
                 'piutang' => $this->piutang,
                 'sisaHari' => $this->sisaHari
             ]);
+    }
+
+    private function getSubject()
+    {
+        return match ($this->sisaHari) {
+            7 => "Reminder: 7 Hari Menuju Jatuh Tempo",
+            5 => "Reminder: 5 Hari Menuju Jatuh Tempo",
+            3 => "Reminder: 3 Hari Menuju Jatuh Tempo",
+            default => "Pengingat Pembayaran",
+        };
     }
 }
