@@ -30,18 +30,46 @@ Route::middleware('guest')->group(function () {
 |--------------------------------------------------------------------------
 */
 
+// // halaman notice verifikasi email
+// Route::get('/email/verify', function () {
+//     return view('auth.verify-email');
+// })->middleware('auth')->name('verification.notice');
+
+// // klik link email
+// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+//     $request->fulfill();
+
+//     return redirect()->route('home')
+//         ->with('success', 'Email berhasil diverifikasi');
+// })->middleware(['auth', 'signed'])->name('verification.verify');
+
+// // kirim ulang email verifikasi
+// Route::post('/email/verification-notification', function (Request $request) {
+//     $request->user()->sendEmailVerificationNotification();
+
+//     return back()->with('success', 'Link verifikasi dikirim ulang');
+// })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 // halaman notice verifikasi email
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
-// klik link email
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+
+// 🔥 STEP 1: buka halaman konfirmasi (TIDAK langsung verifikasi)
+Route::get('/email/verify/{id}/{hash}', function ($id, $hash) {
+    return view('auth.confirm-verify', compact('id', 'hash'));
+})->middleware(['signed'])->name('verification.verify');
+
+
+// 🔥 STEP 2: klik tombol baru verifikasi
+Route::post('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
 
     return redirect()->route('home')
         ->with('success', 'Email berhasil diverifikasi');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+})->middleware(['auth'])->name('verification.verify.post');
+
 
 // kirim ulang email verifikasi
 Route::post('/email/verification-notification', function (Request $request) {
