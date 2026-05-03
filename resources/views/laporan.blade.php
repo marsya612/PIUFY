@@ -199,7 +199,7 @@ document.getElementById('filterForm').addEventListener('submit', function (e) {
 });
 </script> -->
 
-<script>
+<!-- <script>
 document.addEventListener('DOMContentLoaded', function () {
 
     const form = document.getElementById('filterForm');
@@ -246,6 +246,116 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(err => {
                 console.error("ERROR:", err);
+
+                document.getElementById('tableBody').innerHTML =
+                    `<tr><td colspan="4" class="text-danger text-center">Gagal mengambil data</td></tr>`;
+            });
+    });
+
+});
+</script> -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('filterForm');
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const from = document.getElementById('from').value || '';
+        const to = document.getElementById('to').value || '';
+        const statusFilter = document.getElementById('status').value || '';
+        const klien = document.getElementById('klien').value || '';
+
+        fetch(`/laporan-data?from=${from}&to=${to}&status=${statusFilter}&klien=${klien}`)
+            .then(res => res.json())
+            .then(data => {
+
+                console.log("DATA:", data);
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    document.getElementById('tableBody').innerHTML =
+                        `<tr><td colspan="4" class="text-center">Data tidak ditemukan</td></tr>`;
+                    return;
+                }
+
+                let grouped = {};
+                let totalQty = 0;
+                let totalNilai = 0;
+
+                // 🔥 GROUPING
+                data.forEach(item => {
+
+                    const status = (item.status || '-').trim();
+                    const nama = (item.nama_klien || '-').trim();
+                    let nilai = Number(item.nilai_tagihan ?? 0);
+
+                    if (!grouped[status]) grouped[status] = [];
+
+                    grouped[status].push({
+                        status,
+                        nama_klien: nama,
+                        nilai_tagihan: nilai
+                    });
+                });
+
+                let html = '';
+
+                // 🔥 LOOP PER STATUS
+                Object.keys(grouped).forEach(status => {
+
+                    const items = grouped[status];
+
+                    let subtotalQty = 0;
+                    let subtotalNilai = 0;
+
+                    items.forEach(item => {
+
+                        subtotalQty++;
+                        subtotalNilai += item.nilai_tagihan;
+
+                        html += `
+                            <tr>
+                                <td>${status}</td>
+                                <td>${item.nama_klien}</td>
+                                <td class="text-center">1</td>
+                                <td class="text-end">
+                                    Rp${item.nilai_tagihan.toLocaleString('id-ID')}
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                    // 🔥 SUBTOTAL
+                    html += `
+                        <tr class="table-secondary fw-semibold">
+                            <td colspan="2">Subtotal ${status}</td>
+                            <td class="text-center">${subtotalQty}</td>
+                            <td class="text-end">
+                                Rp${subtotalNilai.toLocaleString('id-ID')}
+                            </td>
+                        </tr>
+                    `;
+
+                    totalQty += subtotalQty;
+                    totalNilai += subtotalNilai;
+                });
+
+                // 🔥 TOTAL SEMUA
+                html += `
+                    <tr class="fw-bold">
+                        <td colspan="2">TOTAL KESELURUHAN</td>
+                        <td class="text-center">${totalQty}</td>
+                        <td class="text-end">
+                            Rp${totalNilai.toLocaleString('id-ID')}
+                        </td>
+                    </tr>
+                `;
+
+                document.getElementById('tableBody').innerHTML = html;
+            })
+            .catch(err => {
+                console.error(err);
 
                 document.getElementById('tableBody').innerHTML =
                     `<tr><td colspan="4" class="text-danger text-center">Gagal mengambil data</td></tr>`;
