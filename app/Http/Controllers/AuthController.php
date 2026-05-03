@@ -147,6 +147,32 @@ class AuthController extends Controller
 //     return redirect()->route('verification.notice')
 //         ->with('success', 'Silakan cek email untuk verifikasi akun');
 // }
+    
+    // public function register(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'email' => 'required|email|unique:users,email',
+    //         'phone' => 'required',
+    //         'jabatan' => 'required',
+    //         'password' => 'required|confirmed|min:6',
+    //     ]);
+    
+    //     $user = User::create([
+    //         'name' => $request->name,
+    //         'email' => $request->email,
+    //         'phone' => $request->phone,
+    //         'jabatan' => $request->jabatan,
+    //         'divisi' => 'Keuangan',
+    //         'password' => Hash::make($request->password), // ✅ WAJIB
+    //     ]);
+    
+    //     event(new Registered($user)); // ✅ kirim email
+    
+    //     return redirect()->route('login')
+    //         ->with('success', 'Registrasi berhasil! Cek email untuk verifikasi.');
+    // }
+
     public function register(Request $request)
     {
         $request->validate([
@@ -163,15 +189,47 @@ class AuthController extends Controller
             'phone' => $request->phone,
             'jabatan' => $request->jabatan,
             'divisi' => 'Keuangan',
-            'password' => Hash::make($request->password), // ✅ WAJIB
+            'password' => Hash::make($request->password),
         ]);
     
-        event(new Registered($user)); // ✅ kirim email
+        // 🔥 BUAT LINK VERIFIKASI
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            [
+                'id' => $user->id,
+                'hash' => sha1($user->email),
+            ]
+        );
+    
+        // 🔥 KIRIM EMAIL KE USER
+        Http::withHeaders([
+            'api-key' => env('MAIL_PASSWORD'),
+        ])->post('https://api.brevo.com/v3/smtp/email', [
+            'sender' => [
+                'email' => env('MAIL_FROM_ADDRESS'),
+                'name' => env('MAIL_FROM_NAME'),
+            ],
+            'to' => [
+                [
+                    'email' => $user->email,
+                    'name' => $user->name
+                ]
+            ],
+            'subject' => 'Verifikasi Email',
+            'htmlContent' => "
+                <h2>Halo {$user->name}</h2>
+                <p>Silakan klik tombol di bawah untuk verifikasi akun:</p>
+                <a href='{$verificationUrl}' 
+                   style='padding:10px 15px;background:black;color:white;text-decoration:none;'>
+                   Verifikasi Email
+                </a>
+            ",
+        ]);
     
         return redirect()->route('login')
             ->with('success', 'Registrasi berhasil! Cek email untuk verifikasi.');
     }
-
     // 🔹 LOGOUT
     public function logout(Request $request)
     {
