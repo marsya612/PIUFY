@@ -239,7 +239,8 @@ class PiutangController extends Controller
             return [
                 'status' => $status,
                 'nama_klien' => $item->nama_klien ?? '-',
-                'nilai_piutang' => (float) ($item->nilai_tagihan ?? 0),
+                'nilai_tagihan' => (float) ($item->nilai_tagihan ?? 0),
+                // 'nilai_piutang' => (float) ($item->nilai_tagihan ?? 0),
             ];
         });
 
