@@ -104,3 +104,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     */
     Route::get('/notifikasi', [PiutangController::class, 'notifikasi'])->name('notifikasi');
 });
+
+
+use Illuminate\Support\Facades\Mail;
+
+Route::get('/test-email', function () {
+    Mail::raw('Test dari Railway', function ($msg) {
+        $msg->to('piufy.seize@gmail.com')->subject('Test Brevo');
+    });
+
+    return 'Email dikirim';
+});
