@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -106,23 +109,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 
-use Illuminate\Support\Facades\Http;
+// use Illuminate\Support\Facades\Http;
 
-Route::get('/test-api-email', function () {
+// Route::get('/test-api-email', function () {
 
-    $response = Http::withHeaders([
-        'api-key' => env('MAIL_PASSWORD'),
-    ])->post('https://api.brevo.com/v3/smtp/email', [
-        'sender' => [
-            'email' => env('MAIL_FROM_ADDRESS'),
-            'name' => env('MAIL_FROM_NAME'),
-        ],
-        'to' => [
-            ['email' => 'marsyandaindiyana535@gmail.com']
-        ],
-        'subject' => 'Test Email API',
-        'htmlContent' => '<h1>Berhasil kirim email 🚀</h1>',
-    ]);
+//     $response = Http::withHeaders([
+//         'api-key' => env('MAIL_PASSWORD'),
+//     ])->post('https://api.brevo.com/v3/smtp/email', [
+//         'sender' => [
+//             'email' => env('MAIL_FROM_ADDRESS'),
+//             'name' => env('MAIL_FROM_NAME'),
+//         ],
+//         'to' => [
+//             ['email' => 'marsyandaindiyana535@gmail.com']
+//         ],
+//         'subject' => 'Test Email API',
+//         'htmlContent' => '<h1>Berhasil kirim email 🚀</h1>',
+//     ]);
 
-    return $response->body();
-});
+//     return $response->body();
+// });
