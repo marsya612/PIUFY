@@ -321,39 +321,71 @@ class PiutangController extends Controller
     // 🔹 UPDATE PROFILE
 
 
+    // public function updateProfile(Request $request)
+    // {
+    //     $user = auth()->user();
+
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'email' => 'required|email|unique:users,email,' . $user->id,
+    //         'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    //     ]);
+
+    //     // HANDLE UPLOAD FOTO
+    //     if ($request->hasFile('photo')) {
+
+    //         // hapus foto lama (optional)
+    //         if ($user->photo) {
+    //             Storage::delete($user->photo);
+    //         }
+
+    //         $path = $request->file('photo')->store('profile', 'public');
+
+    //         $user->photo = $path;
+    //     }
+
+    //     // update data lain
+    //     $user->update([
+    //         'name' => $request->name,
+    //         'email' => $request->email,
+    //         'phone' => $request->phone,
+    //         'jabatan' => $request->jabatan,
+    //         // 'divisi' => $request->divisi,
+    //         'photo' => $user->photo,
+    //     ]);
+
+    //     return redirect()->route('profile')->with('success', 'Profile updated');
+    // }
+
     public function updateProfile(Request $request)
     {
         $user = auth()->user();
-
+    
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-
-        // HANDLE UPLOAD FOTO
+    
         if ($request->hasFile('photo')) {
-
-            // hapus foto lama (optional)
+    
+            // hapus foto lama (FIXED)
             if ($user->photo) {
-                Storage::delete($user->photo);
+                Storage::disk('public')->delete($user->photo);
             }
-
+    
             $path = $request->file('photo')->store('profile', 'public');
-
             $user->photo = $path;
         }
-
-        // update data lain
+    
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'jabatan' => $request->jabatan,
-            // 'divisi' => $request->divisi,
             'photo' => $user->photo,
         ]);
-
+    
         return redirect()->route('profile')->with('success', 'Profile updated');
     }
 
