@@ -18,7 +18,8 @@
 
                     @if($user->photo)
                         <img id="previewImage"
-                            src="{{ asset('storage/' . $user->photo) }}"
+                            <!-- src="{{ asset('storage/' . $user->photo) }}" -->
+                            src="{{ $user->photo }}" 
                             class="rounded-circle shadow"
                             style="width:200px; height:200px; object-fit:cover;">
                     @else
