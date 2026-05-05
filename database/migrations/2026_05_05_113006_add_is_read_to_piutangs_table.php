@@ -6,23 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('piutangs', function (Blueprint $table) {
-            //
+            $table->boolean('is_read')->default(false)->after('status');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('piutangs', function (Blueprint $table) {
-            //
+            $table->dropColumn('is_read');
         });
     }
 };
