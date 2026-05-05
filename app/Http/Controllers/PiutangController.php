@@ -10,6 +10,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\ReminderPiutangMail;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class PiutangController extends Controller
 {
@@ -402,14 +403,14 @@ class PiutangController extends Controller
         if ($request->hasFile('photo')) {
             // hapus foto lama di Cloudinary
             if ($user->photo) {
-                cloudinary()->destroy($user->photo);
+                Cloudinary::destroy($user->photo);
             }
-    
+        
             // upload ke Cloudinary
-            $result = cloudinary()->upload($request->file('photo')->getRealPath(), [
+            $result = Cloudinary::upload($request->file('photo')->getRealPath(), [
                 'folder' => 'profile'
             ]);
-    
+        
             $user->photo = $result->getSecurePath();
         }
     
