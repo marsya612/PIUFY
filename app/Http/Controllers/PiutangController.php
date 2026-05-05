@@ -449,7 +449,7 @@ class PiutangController extends Controller
     public function kirimReminder()
     {
         $data = Piutang::where('status', '!=', 'lunas')
-                       ->where('user_id', Auth::id()) // filter per user
+                       ->where('user_id', Auth::id())
                        ->get();
     
         foreach ($data as $item) {
@@ -457,32 +457,47 @@ class PiutangController extends Controller
                 ->diffInDays($item->tanggal_jatuh_tempo, false);
     
             if (in_array($sisaHari, [7, 5, 3])) {
-                // pastikan kolom email ada di tabel piutangs
-                if (!empty($item->email_klien)) {
-                    Mail::to($item->email_klien)
-                        ->send(new ReminderPiutangMail($item, $sisaHari));
-                }
+                Mail::to(Auth::user()->email) // ← ambil email user yang login
+                    ->send(new ReminderPiutangMail($item, $sisaHari));
             }
         }
     
         return "Reminder terkirim";
     }
 
+    // public function notifikasi()
+    // {
+    //     $today = now();
+
+    //     $notifikasi = Piutang::where('status', '!=', 'lunas')
+    //         ->get()
+    //         ->filter(function ($item) use ($today) {
+    //             $sisaHari = $today->diffInDays($item->tanggal_jatuh_tempo, false);
+    //             return in_array($sisaHari, [7,5,3]);
+    //         })
+    //         ->map(function ($item) use ($today) {
+    //             $item->sisaHari = $today->diffInDays($item->tanggal_jatuh_tempo, false);
+    //             return $item;
+    //         });
+
+    //     return view('notifikasi', compact('notifikasi'));
+    // }
     public function notifikasi()
     {
         $today = now();
-
+    
         $notifikasi = Piutang::where('status', '!=', 'lunas')
+            ->where('user_id', Auth::id()) // ← tambah filter user
             ->get()
             ->filter(function ($item) use ($today) {
-                $sisaHari = $today->diffInDays($item->tanggal_jatuh_tempo, false);
-                return in_array($sisaHari, [7,5,3]);
+                $sisaHari = (int) $today->diffInDays($item->tanggal_jatuh_tempo, false);
+                return in_array($sisaHari, [7, 5, 3]);
             })
             ->map(function ($item) use ($today) {
-                $item->sisaHari = $today->diffInDays($item->tanggal_jatuh_tempo, false);
+                $item->sisaHari = (int) $today->diffInDays($item->tanggal_jatuh_tempo, false);
                 return $item;
             });
-
+    
         return view('notifikasi', compact('notifikasi'));
     }
 
