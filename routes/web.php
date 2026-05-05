@@ -30,17 +30,15 @@ Route::get('/test-reminder', function () {
     
     if ($item) {
         $user = \App\Models\User::find($item->user_id);
-        try {
-            \Illuminate\Support\Facades\Mail::to($user->email)
-                ->send(new \App\Mail\ReminderPiutangMail($item, 3));
-            return "Email terkirim ke: " . $user->email;
-        } catch (\Exception $e) {
-            return "ERROR: " . $e->getMessage();
-        }
+        return [
+            'piutang_no' => $item->no_tagihan,
+            'piutang_user_id' => $item->user_id,
+            'user_email' => $user->email,
+            'login_user_id' => \Illuminate\Support\Facades\Auth::id(),
+            'login_email' => \Illuminate\Support\Facades\Auth::user()->email,
+        ];
     }
-    
-    return "Tidak ada data piutang";
-})->middleware('auth');;
+})->middleware('auth');
 /*
 |--------------------------------------------------------------------------
 | GUEST ROUTES
