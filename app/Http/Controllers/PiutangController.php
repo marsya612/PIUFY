@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage; // ✅ tambahkan ini
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\ReminderPiutangMail;
 
 class PiutangController extends Controller
 {
@@ -426,22 +427,44 @@ class PiutangController extends Controller
         return $pdf->download('laporan-piutang.pdf');
     }
 
+    // public function kirimReminder()
+    // {
+    //     $data = Piutang::where('status', '!=', 'lunas')->get();
+
+    //     foreach ($data as $item) {
+
+    //         $sisaHari = \Carbon\Carbon::now()
+    //             ->diffInDays($item->tanggal_jatuh_tempo, false);
+
+    //         if (in_array($sisaHari, [7,5,3])) {
+
+    //             Mail::to('email@klien.com') // 🔥 ganti dengan email klien
+    //                 ->send(new ReminderPiutangMail($item, $sisaHari));
+    //         }
+    //     }
+
+    //     return "Reminder terkirim";
+    // }
+
     public function kirimReminder()
     {
-        $data = Piutang::where('status', '!=', 'lunas')->get();
-
+        $data = Piutang::where('status', '!=', 'lunas')
+                       ->where('user_id', Auth::id()) // filter per user
+                       ->get();
+    
         foreach ($data as $item) {
-
-            $sisaHari = \Carbon\Carbon::now()
+            $sisaHari = (int) \Carbon\Carbon::now()
                 ->diffInDays($item->tanggal_jatuh_tempo, false);
-
-            if (in_array($sisaHari, [7,5,3])) {
-
-                Mail::to('email@klien.com') // 🔥 ganti dengan email klien
-                    ->send(new ReminderPiutangMail($item, $sisaHari));
+    
+            if (in_array($sisaHari, [7, 5, 3])) {
+                // pastikan kolom email ada di tabel piutangs
+                if (!empty($item->email_klien)) {
+                    Mail::to($item->email_klien)
+                        ->send(new ReminderPiutangMail($item, $sisaHari));
+                }
             }
         }
-
+    
         return "Reminder terkirim";
     }
 
