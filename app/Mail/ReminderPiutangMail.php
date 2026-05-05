@@ -34,7 +34,7 @@ class ReminderPiutangMail extends Mailable
     {
         $subject = $this->getSubject();
         return $this->subject($subject)
-            ->view('mail.reminder_piutang') // ← ganti ini
+            ->view('resources.views.reminder_piutang') // ← ganti ini
             ->with([
                 'piutang' => $this->piutang,
                 'sisaHari' => $this->sisaHari
