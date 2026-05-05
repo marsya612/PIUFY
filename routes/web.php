@@ -11,18 +11,18 @@ use App\Models\User;
 use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\AuthController;
 
-Route::get('/test-reminder', function () {
-    $item = \App\Models\Piutang::where('status', '!=', 'lunas')->first();
+// Route::get('/test-reminder', function () {
+//     $item = \App\Models\Piutang::where('status', '!=', 'lunas')->first();
     
-    if ($item) {
-        $user = \App\Models\User::find($item->user_id);
-        \Illuminate\Support\Facades\Mail::to($user->email)
-            ->send(new \App\Mail\ReminderPiutangMail($item, 3));
-        return "Email terkirim ke: " . $user->email;
-    }
+//     if ($item) {
+//         $user = \App\Models\User::find($item->user_id);
+//         \Illuminate\Support\Facades\Mail::to($user->email)
+//             ->send(new \App\Mail\ReminderPiutangMail($item, 3));
+//         return "Email terkirim ke: " . $user->email;
+//     }
     
-    return "Tidak ada data piutang";
-});
+//     return "Tidak ada data piutang";
+// });
 /*
 |--------------------------------------------------------------------------
 | GUEST ROUTES
