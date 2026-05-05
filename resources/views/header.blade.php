@@ -22,15 +22,16 @@
                 
                 @php
                     $today = now()->startOfDay();
+                    $dibaca = session('notif_dibaca', []);
                     $jumlahNotif = \App\Models\Piutang::where('status', '!=', 'lunas')
                         ->where('user_id', Auth::id())
                         ->get()
-                        ->filter(function ($item) use ($today) {
+                        ->filter(function ($item) use ($today, $dibaca) {
                             $sisaHari = (int) $today->diffInDays(
                                 \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay(),
                                 false
                             );
-                            return in_array($sisaHari, [7, 5, 3]);
+                            return in_array($sisaHari, [7, 5, 3]) && !in_array($item->id, $dibaca);
                         })->count();
                 @endphp
             
