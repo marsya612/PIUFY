@@ -13,26 +13,50 @@ class KirimReminderPiutang extends Command
     protected $signature = 'reminder:piutang';
     protected $description = 'Kirim email reminder piutang jatuh tempo';
 
+    // public function handle()
+    // {
+    //     $data = Piutang::where('status', '!=', 'lunas')->get();
+
+    //     foreach ($data as $item) {
+    //         $sisaHari = (int) Carbon::now()
+    //             ->diffInDays($item->tanggal_jatuh_tempo, false);
+
+    //         if (in_array($sisaHari, [7, 5, 3])) {
+    //             $user = \App\Models\User::find($item->user_id);
+
+    //             if ($user) {
+    //                 Mail::to($user->email)
+    //                     ->send(new ReminderPiutangMail($item, $sisaHari));
+
+    //                 $this->info("Reminder terkirim ke: {$user->email} untuk tagihan {$item->no_tagihan}");
+    //             }
+    //         }
+    //     }
+
+    //     $this->info('Selesai!');
+    // }
     public function handle()
     {
         $data = Piutang::where('status', '!=', 'lunas')->get();
-
+    
         foreach ($data as $item) {
-            $sisaHari = (int) Carbon::now()
-                ->diffInDays($item->tanggal_jatuh_tempo, false);
-
+            $today = Carbon::now()->startOfDay(); // ← startOfDay()
+            $sisaHari = (int) $today->diffInDays(
+                Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay(), // ← startOfDay()
+                false
+            );
+    
             if (in_array($sisaHari, [7, 5, 3])) {
                 $user = \App\Models\User::find($item->user_id);
-
+    
                 if ($user) {
                     Mail::to($user->email)
                         ->send(new ReminderPiutangMail($item, $sisaHari));
-
                     $this->info("Reminder terkirim ke: {$user->email} untuk tagihan {$item->no_tagihan}");
                 }
             }
         }
-
+    
         $this->info('Selesai!');
     }
 }
