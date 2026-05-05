@@ -500,29 +500,62 @@ class PiutangController extends Controller
     
     //     return view('notifikasi', compact('notifikasi'));
     // }
+    // public function notifikasi()
+    // {
+    //     $today = now()->startOfDay(); // ← tambah startOfDay()
+    
+    //     $notifikasi = Piutang::where('status', '!=', 'lunas')
+    //         ->where('user_id', Auth::id())
+    //         ->get()
+    //         ->filter(function ($item) use ($today) {
+    //             $sisaHari = (int) $today->diffInDays(
+    //                 \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay(), // ← tambah startOfDay()
+    //                 false
+    //             );
+    //             return in_array($sisaHari, [7, 5, 3]);
+    //         })
+    //         ->map(function ($item) use ($today) {
+    //             $item->sisaHari = (int) $today->diffInDays(
+    //                 \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay(), // ← tambah startOfDay()
+    //                 false
+    //             );
+    //             return $item;
+    //         });
+    
+    //     return view('notifikasi', compact('notifikasi'));
+    // }
     public function notifikasi()
     {
-        $today = now()->startOfDay(); // ← tambah startOfDay()
+        $today = now()->startOfDay();
     
         $notifikasi = Piutang::where('status', '!=', 'lunas')
             ->where('user_id', Auth::id())
             ->get()
             ->filter(function ($item) use ($today) {
                 $sisaHari = (int) $today->diffInDays(
-                    \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay(), // ← tambah startOfDay()
+                    \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay(),
                     false
                 );
                 return in_array($sisaHari, [7, 5, 3]);
             })
             ->map(function ($item) use ($today) {
                 $item->sisaHari = (int) $today->diffInDays(
-                    \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay(), // ← tambah startOfDay()
+                    \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay(),
                     false
                 );
                 return $item;
             });
     
         return view('notifikasi', compact('notifikasi'));
+    }
+
+    public function bacaNotif($id)
+    {
+        $dibaca = session('notif_dibaca', []);
+        $dibaca[] = $id;
+        session(['notif_dibaca' => $dibaca]);
+    
+        return response()->json(['success' => true]);
     }
 
 }
