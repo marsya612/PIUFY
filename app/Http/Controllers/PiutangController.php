@@ -390,6 +390,40 @@ class PiutangController extends Controller
     
     //     return redirect()->route('profile')->with('success', 'Profile updated');
     // }
+    // public function updateProfile(Request $request)
+    // {
+    //     $user = auth()->user();
+    
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'email' => 'required|email|unique:users,email,' . $user->id,
+    //         'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    //     ]);
+    
+    //     if ($request->hasFile('photo')) {
+    //         // hapus foto lama di Cloudinary
+    //         if ($user->photo) {
+    //             Cloudinary::destroy($user->photo);
+    //         }
+        
+    //         // upload ke Cloudinary
+    //         $result = Cloudinary::upload($request->file('photo')->getRealPath(), [
+    //             'folder' => 'profile'
+    //         ]);
+        
+    //         $user->photo = $result->getSecurePath();
+    //     }
+    
+    //     $user->update([
+    //         'name' => $request->name,
+    //         'email' => $request->email,
+    //         'phone' => $request->phone,
+    //         'jabatan' => $request->jabatan,
+    //         'photo' => $user->photo,
+    //     ]);
+    
+    //     return redirect()->route('profile')->with('success', 'Profile updated');
+    // }
     public function updateProfile(Request $request)
     {
         $user = auth()->user();
@@ -401,17 +435,20 @@ class PiutangController extends Controller
         ]);
     
         if ($request->hasFile('photo')) {
-            // hapus foto lama di Cloudinary
-            if ($user->photo) {
-                Cloudinary::destroy($user->photo);
-            }
-        
-            // upload ke Cloudinary
-            $result = Cloudinary::upload($request->file('photo')->getRealPath(), [
-                'folder' => 'profile'
+            $imageData = base64_encode(
+                file_get_contents($request->file('photo')->getRealPath())
+            );
+    
+            $response = \Illuminate\Support\Facades\Http::withHeaders([
+                'Authorization' => 'Client-ID ' . env('IMGUR_CLIENT_ID'),
+            ])->post('https://api.imgur.com/3/image', [
+                'image' => $imageData,
+                'type' => 'base64',
             ]);
-        
-            $user->photo = $result->getSecurePath();
+    
+            if ($response->successful()) {
+                $user->photo = $response->json()['data']['link'];
+            }
         }
     
         $user->update([
@@ -424,7 +461,7 @@ class PiutangController extends Controller
     
         return redirect()->route('profile')->with('success', 'Profile updated');
     }
-
+    
     public function exportPdf(Request $request)
     {
         // $query = Piutang::query();
