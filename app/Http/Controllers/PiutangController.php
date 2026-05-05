@@ -548,12 +548,15 @@ class PiutangController extends Controller
     
         return view('notifikasi', compact('notifikasi'));
     }
-
+    
     public function bacaNotif($id)
     {
-        $dibaca = session('notif_dibaca', []);
-        $dibaca[] = $id;
-        session(['notif_dibaca' => $dibaca]);
+        $piutang = Piutang::where('id', $id)
+                          ->where('user_id', Auth::id())
+                          ->firstOrFail();
+    
+        $piutang->is_read = true;
+        $piutang->save();
     
         return response()->json(['success' => true]);
     }
