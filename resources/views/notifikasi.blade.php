@@ -30,14 +30,24 @@
 
 <script>
 function bacaNotif(id) {
+    const token = document.querySelector('meta[name="csrf-token"]');
+    
     fetch(`/notifikasi/baca/${id}`, {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'X-CSRF-TOKEN': token ? token.getAttribute('content') : '{{ csrf_token() }}',
             'Content-Type': 'application/json'
         }
-    }).then(() => {
-        document.getElementById(`notif-${id}`).style.display = 'none';
+    })
+    .then(response => {
+        if (response.ok) {
+            document.getElementById(`notif-${id}`).style.display = 'none';
+        } else {
+            console.error('Gagal:', response.status);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
     });
 }
 </script>
