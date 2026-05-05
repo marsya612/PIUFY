@@ -23,7 +23,7 @@ Route::get('/debug-reminder', function () {
     }
 
     echo "Timezone: " . config('app.timezone');
-});
+})->middleware('auth'); // ← tambah ini
 /*
 |--------------------------------------------------------------------------
 | GUEST ROUTES
