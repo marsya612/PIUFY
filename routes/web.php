@@ -11,38 +11,6 @@ use App\Models\User;
 use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\AuthController;
 
-// Route::get('/debug-reminder', function () {
-//     $today = now();
-//     $data = \App\Models\Piutang::where('status', '!=', 'lunas')
-//                                ->where('user_id', \Illuminate\Support\Facades\Auth::id())
-//                                ->get();
-
-//     foreach ($data as $item) {
-//         $sisaHari = (int) $today->diffInDays($item->tanggal_jatuh_tempo, false);
-//         echo "Tagihan: {$item->no_tagihan} | Jatuh Tempo: {$item->tanggal_jatuh_tempo} | Sisa Hari: {$sisaHari} <br>";
-//     }
-
-//     echo "Timezone: " . config('app.timezone');
-// })->middleware('auth'); // ← tambah ini
-
-Route::get('/test-reminder', function () {
-    $item = \App\Models\Piutang::where('status', '!=', 'lunas')
-                               ->where('user_id', \Illuminate\Support\Facades\Auth::id()) // ← filter user
-                               ->first();
-    
-    if ($item) {
-        $user = \App\Models\User::find($item->user_id);
-        try {
-            \Illuminate\Support\Facades\Mail::to($user->email)
-                ->send(new \App\Mail\ReminderPiutangMail($item, 3));
-            return "Email terkirim ke: " . $user->email;
-        } catch (\Exception $e) {
-            return "ERROR: " . $e->getMessage();
-        }
-    }
-    
-    return "Tidak ada data piutang";
-})->middleware('auth');
 /*
 |--------------------------------------------------------------------------
 | GUEST ROUTES
