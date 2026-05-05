@@ -28,7 +28,7 @@ Artisan::command('inspire', function () {
 //             }
 //         }
 //     }
-// })->dailyAt('15:10'); // ← tentukan jam pengiriman
+// })->dailyAt('07.00'); // ← tentukan jam pengiriman
 
 Schedule::call(function () {
     $data = Piutang::where('status', '!=', 'lunas')->get();
@@ -49,7 +49,7 @@ Schedule::call(function () {
             }
         }
     }
-})->dailyAt('16:00');
+})->dailyAt('07:00');
 // <?php
 
 // use Illuminate\Foundation\Inspiring;
