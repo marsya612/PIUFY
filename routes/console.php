@@ -12,25 +12,44 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
+// Schedule::call(function () {
+//     $data = Piutang::where('status', '!=', 'lunas')->get();
+
+//     foreach ($data as $item) {
+//         $sisaHari = (int) Carbon::now() // ← cast ke int
+//             ->diffInDays($item->tanggal_jatuh_tempo, false);
+
+//         if (in_array($sisaHari, [7, 5, 3])) {
+//             $user = User::find($item->user_id); // ← ambil user pemilik piutang saja
+
+//             if ($user && $user->email) {
+//                 Mail::to($user->email)
+//                     ->send(new ReminderPiutangMail($item, $sisaHari));
+//             }
+//         }
+//     }
+// })->dailyAt('15:10'); // ← tentukan jam pengiriman
+
 Schedule::call(function () {
     $data = Piutang::where('status', '!=', 'lunas')->get();
 
     foreach ($data as $item) {
-        $sisaHari = (int) Carbon::now() // ← cast ke int
-            ->diffInDays($item->tanggal_jatuh_tempo, false);
+        $today = \Carbon\Carbon::now()->startOfDay(); // ← startOfDay()
+        $sisaHari = (int) $today->diffInDays(
+            \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay(), // ← startOfDay()
+            false
+        );
 
         if (in_array($sisaHari, [7, 5, 3])) {
-            $user = User::find($item->user_id); // ← ambil user pemilik piutang saja
+            $user = \App\Models\User::find($item->user_id);
 
             if ($user && $user->email) {
-                Mail::to($user->email)
-                    ->send(new ReminderPiutangMail($item, $sisaHari));
+                \Illuminate\Support\Facades\Mail::to($user->email)
+                    ->send(new \App\Mail\ReminderPiutangMail($item, $sisaHari));
             }
         }
     }
-})->dailyAt('15:10'); // ← tentukan jam pengiriman
-
-
+})->dailyAt('16:00');
 // <?php
 
 // use Illuminate\Foundation\Inspiring;
