@@ -6,7 +6,8 @@
         <div class="card-body">
             @forelse($notifikasi as $item)
                 <div class="border-bottom py-2 d-flex justify-content-between align-items-center"
-                     id="notif-{{ $item->id }}">
+                     id="notif-{{ $item->id }}"
+                     style="{{ $item->is_read ? 'opacity: 0.4' : '' }}">
                     <div>
                         <strong>{{ $item->nama_klien }}</strong><br>
                         {{ $item->nama_proyek }}<br>
@@ -14,10 +15,14 @@
                             Jatuh tempo {{ $item->sisaHari }} hari lagi
                         </span>
                     </div>
-                    <button class="btn btn-sm btn-outline-secondary"
-                            onclick="bacaNotif({{ $item->id }})">
-                        ✓ Tandai Dibaca
-                    </button>
+                    @if($item->is_read)
+                        <span class="text-success fw-semibold">✓ Sudah Dibaca</span>
+                    @else
+                        <button class="btn btn-sm btn-outline-secondary"
+                                onclick="bacaNotif({{ $item->id }})">
+                            ✓ Tandai Dibaca
+                        </button>
+                    @endif
                 </div>
             @empty
                 <div class="text-center text-muted">
@@ -42,12 +47,8 @@ function bacaNotif(id) {
     .then(response => {
         if (response.ok) {
             const el = document.getElementById(`notif-${id}`);
-            
-            // ← ganti tombol jadi tanda sudah dibaca
             el.querySelector('button').outerHTML = 
                 '<span class="text-success fw-semibold">✓ Sudah Dibaca</span>';
-            
-            // ← redup itemnya
             el.style.opacity = '0.4';
         }
     })
