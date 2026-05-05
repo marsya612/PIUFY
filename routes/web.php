@@ -145,6 +145,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     |--------------------------
     */
     Route::get('/notifikasi', [PiutangController::class, 'notifikasi'])->name('notifikasi');
+    Route::post('/notifikasi/baca/{id}', [PiutangController::class, 'bacaNotif'])->name('notifikasi.baca');
 });
 
 
