@@ -19,12 +19,22 @@ class ReminderPiutangMail extends Mailable
         $this->sisaHari = $sisaHari;
     }
 
+    // public function build()
+    // {
+    //     $subject = $this->getSubject();
+
+    //     return $this->subject($subject)
+    //         ->view('notifikasi')
+    //         ->with([
+    //             'piutang' => $this->piutang,
+    //             'sisaHari' => $this->sisaHari
+    //         ]);
+    // }
     public function build()
     {
         $subject = $this->getSubject();
-
         return $this->subject($subject)
-            ->view('notifikasi')
+            ->view('mail.reminder_piutang') // ← ganti ini
             ->with([
                 'piutang' => $this->piutang,
                 'sisaHari' => $this->sisaHari
