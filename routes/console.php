@@ -49,7 +49,7 @@ Schedule::call(function () {
             }
         }
     }
-})->dailyAt('07:00');
+})->dailyAt('08:00');
 // <?php
 
 // use Illuminate\Foundation\Inspiring;
