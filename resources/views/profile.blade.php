@@ -11,11 +11,11 @@
         <div class="row align-items-center">
 
             <!-- FOTO -->
-            <div class="col-md-4 text-center">
+            <!-- <div class="col-md-4 text-center">
 
                 @if($user->photo)
                     <!-- <img src="{{ asset('storage/' . $user->photo) }}" -->
-                    <img src="{{ $user->photo }}" alt="foto profil">
+                    <img src="{{ $user->photo }}" alt="foto profil" class="rounded-circle" style="width:200px; height:200px; object-fit:cover;">
                         class="rounded-circle"
                         style="width:200px; height:200px; object-fit:cover;">
                 @else
@@ -25,6 +25,19 @@
                     </div>
                 @endif
 
+            </div> -->
+            <div class="col-md-4 text-center">
+                @if($user->photo)
+                    <img src="{{ $user->photo }}" 
+                         alt="foto profil" 
+                         class="rounded-circle" 
+                         style="width:200px; height:200px; object-fit:cover;">
+                @else
+                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center"
+                        style="width:200px; height:200px; margin:auto;">
+                        <i class="bi bi-person" style="font-size:80px; color:#bbb;"></i>
+                    </div>
+                @endif
             </div>
 
             <!-- DATA -->
