@@ -14,7 +14,8 @@
             <div class="col-md-4 text-center">
 
                 @if($user->photo)
-                    <img src="{{ asset('storage/' . $user->photo) }}"
+                    <!-- <img src="{{ asset('storage/' . $user->photo) }}" -->
+                    <img src="{{ $user->photo }}" alt="foto profil">
                         class="rounded-circle"
                         style="width:200px; height:200px; object-fit:cover;">
                 @else
