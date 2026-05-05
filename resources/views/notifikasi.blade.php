@@ -41,9 +41,14 @@ function bacaNotif(id) {
     })
     .then(response => {
         if (response.ok) {
-            document.getElementById(`notif-${id}`).style.display = 'none';
-        } else {
-            console.error('Gagal:', response.status);
+            const el = document.getElementById(`notif-${id}`);
+            
+            // ← ganti tombol jadi tanda sudah dibaca
+            el.querySelector('button').outerHTML = 
+                '<span class="text-success fw-semibold">✓ Sudah Dibaca</span>';
+            
+            // ← redup itemnya
+            el.style.opacity = '0.4';
         }
     })
     .catch(error => {
