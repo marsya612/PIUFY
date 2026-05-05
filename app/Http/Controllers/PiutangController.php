@@ -358,6 +358,37 @@ class PiutangController extends Controller
     //     return redirect()->route('profile')->with('success', 'Profile updated');
     // }
 
+    // public function updateProfile(Request $request)
+    // {
+    //     $user = auth()->user();
+    
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'email' => 'required|email|unique:users,email,' . $user->id,
+    //         'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    //     ]);
+    
+    //     if ($request->hasFile('photo')) {
+    
+    //         // hapus foto lama (FIXED)
+    //         if ($user->photo) {
+    //             Storage::disk('public')->delete($user->photo);
+    //         }
+    
+    //         $path = $request->file('photo')->store('profile', 'public');
+    //         $user->photo = $path;
+    //     }
+    
+    //     $user->update([
+    //         'name' => $request->name,
+    //         'email' => $request->email,
+    //         'phone' => $request->phone,
+    //         'jabatan' => $request->jabatan,
+    //         'photo' => $user->photo,
+    //     ]);
+    
+    //     return redirect()->route('profile')->with('success', 'Profile updated');
+    // }
     public function updateProfile(Request $request)
     {
         $user = auth()->user();
@@ -369,14 +400,17 @@ class PiutangController extends Controller
         ]);
     
         if ($request->hasFile('photo')) {
-    
-            // hapus foto lama (FIXED)
+            // hapus foto lama di Cloudinary
             if ($user->photo) {
-                Storage::disk('public')->delete($user->photo);
+                cloudinary()->destroy($user->photo);
             }
     
-            $path = $request->file('photo')->store('profile', 'public');
-            $user->photo = $path;
+            // upload ke Cloudinary
+            $result = cloudinary()->upload($request->file('photo')->getRealPath(), [
+                'folder' => 'profile'
+            ]);
+    
+            $user->photo = $result->getSecurePath();
         }
     
         $user->update([
