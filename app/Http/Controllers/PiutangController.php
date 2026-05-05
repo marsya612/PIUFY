@@ -482,19 +482,43 @@ class PiutangController extends Controller
 
     //     return view('notifikasi', compact('notifikasi'));
     // }
+    // public function notifikasi()
+    // {
+    //     $today = now();
+    
+    //     $notifikasi = Piutang::where('status', '!=', 'lunas')
+    //         ->where('user_id', Auth::id()) // ← tambah filter user
+    //         ->get()
+    //         ->filter(function ($item) use ($today) {
+    //             $sisaHari = (int) $today->diffInDays($item->tanggal_jatuh_tempo, false);
+    //             return in_array($sisaHari, [7, 5, 3]);
+    //         })
+    //         ->map(function ($item) use ($today) {
+    //             $item->sisaHari = (int) $today->diffInDays($item->tanggal_jatuh_tempo, false);
+    //             return $item;
+    //         });
+    
+    //     return view('notifikasi', compact('notifikasi'));
+    // }
     public function notifikasi()
     {
-        $today = now();
+        $today = now()->startOfDay(); // ← tambah startOfDay()
     
         $notifikasi = Piutang::where('status', '!=', 'lunas')
-            ->where('user_id', Auth::id()) // ← tambah filter user
+            ->where('user_id', Auth::id())
             ->get()
             ->filter(function ($item) use ($today) {
-                $sisaHari = (int) $today->diffInDays($item->tanggal_jatuh_tempo, false);
+                $sisaHari = (int) $today->diffInDays(
+                    \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay(), // ← tambah startOfDay()
+                    false
+                );
                 return in_array($sisaHari, [7, 5, 3]);
             })
             ->map(function ($item) use ($today) {
-                $item->sisaHari = (int) $today->diffInDays($item->tanggal_jatuh_tempo, false);
+                $item->sisaHari = (int) $today->diffInDays(
+                    \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay(), // ← tambah startOfDay()
+                    false
+                );
                 return $item;
             });
     
