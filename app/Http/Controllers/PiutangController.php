@@ -484,7 +484,7 @@ class PiutangController extends Controller
                 'image' => $imageData,
             ]);
     
-            dd($response->json()); // ← debug sementara
+            dd(env('IMGBB_API_KEY'), $response->json());// ← debug sementara
     
             if ($response->successful()) {
                 $user->photo = $response->json()['data']['url'];
