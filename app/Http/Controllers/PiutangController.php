@@ -316,7 +316,7 @@ class PiutangController extends Controller
     public function profile()
     {
         $user = auth()->user();
-        dd($user->photo); // ← cek hasilnya
+        // dd($user->photo); // ← cek hasilnya
         return view('profile', compact('user'));
     }
 
@@ -494,7 +494,9 @@ class PiutangController extends Controller
             // dd(env('IMGBB_API_KEY'), $response->json());
         
             if ($response->successful()) {
-                $user->photo = $response->json()['data']['url'];
+                // $user->photo = $response->json()['data']['url'];
+                $user->photo = $response->json()['data'];
+                $user->photo = $data['image']['url'];
             }
         }
     
