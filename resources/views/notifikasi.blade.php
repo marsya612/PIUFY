@@ -17,9 +17,9 @@
                 </div>
                 <div class="d-flex align-items-center gap-2">
                     @if($item->is_read)
-                        <span class="text-success fw-semibold">✓ Sudah Dibaca</span>
+                        <span id="status-{{ $item->id }}" class="text-success fw-semibold">✓ Sudah Dibaca</span>
                     @else
-                        <button class="btn btn-sm btn-outline-secondary"
+                        <button id="status-{{ $item->id }}" class="btn btn-sm btn-outline-secondary"
                             onclick="bacaNotif({{ $item->id }})">
                             ✓ Tandai Dibaca
                         </button>
@@ -53,8 +53,8 @@ function bacaNotif(id) {
     .then(response => {
         if (response.ok) {
             const el = document.getElementById(`notif-${id}`);
-            el.querySelector('button.btn-outline-secondary').outerHTML =
-                '<span class="text-success fw-semibold">✓ Sudah Dibaca</span>';
+            const statusEl = document.getElementById(`status-${id}`);
+            statusEl.outerHTML = `<span id="status-${id}" class="text-success fw-semibold">✓ Sudah Dibaca</span>`;
             el.style.opacity = '0.4';
         }
     })
