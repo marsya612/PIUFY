@@ -8,9 +8,7 @@
 
     <!-- Title -->
     <div class="d-flex align-items-center mb-4">
-        <a href="{{ route('piutang.index') }}" class="me-3 text-dark text-decoration-none">
-            ←
-        </a>
+        <a href="{{ route('piutang.index') }}" class="me-3 text-dark text-decoration-none">←</a>
         <h4 class="mb-0 fw-semibold">Tambah Tagihan Baru</h4>
     </div>
 
@@ -38,30 +36,35 @@
 
                     <div class="col-md-6">
                         <label class="form-label">No. Tagihan *</label>
-                        <input type="text" name="no_tagihan"
+                        <input type="text" id="no_tagihan" name="no_tagihan"
                             value="{{ old('no_tagihan') }}"
-                            class="form-control rounded-3 @error('no_tagihan') is-invalid @enderror">
+                            class="form-control rounded-3 @error('no_tagihan') is-invalid @enderror"
+                            autocomplete="off">
+                        <div id="no_tagihan_info" class="form-text text-success d-none">
+                            ✓ Data tagihan sebelumnya ditemukan
+                        </div>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Nama Klien *</label>
-                        <input type="text" name="nama_klien"
+                        <input type="text" id="nama_klien" name="nama_klien"
                             value="{{ old('nama_klien') }}"
                             class="form-control rounded-3 @error('nama_klien') is-invalid @enderror">
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Nama Proyek *</label>
-                        <input type="text" name="nama_proyek"
+                        <input type="text" id="nama_proyek" name="nama_proyek"
                             value="{{ old('nama_proyek') }}"
                             class="form-control rounded-3 @error('nama_proyek') is-invalid @enderror">
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Termin *</label>
-                        <input type="text" name="termin"
+                        <input type="text" id="termin" name="termin"
                             value="{{ old('termin') }}"
-                            class="form-control rounded-3 @error('termin') is-invalid @enderror">
+                            class="form-control rounded-3 @error('termin') is-invalid @enderror"
+                            placeholder="Contoh: Termin 1">
                     </div>
 
                     <div class="col-md-6">
@@ -73,7 +76,7 @@
 
                     <div class="col-md-6">
                         <label class="form-label">Metode Pembayaran *</label>
-                        <select name="metode_pembayaran"
+                        <select id="metode_pembayaran" name="metode_pembayaran"
                             class="form-control rounded-3 @error('metode_pembayaran') is-invalid @enderror">
                             <option value="">-- Pilih Metode --</option>
                             <option value="Reguler" {{ old('metode_pembayaran') == 'Reguler' ? 'selected' : '' }}>Reguler</option>
@@ -83,16 +86,18 @@
 
                     <div class="col-md-6">
                         <label class="form-label">Tanggal Terbit *</label>
-                        <input type="date" name="tanggal_terbit"
+                        <input type="date" id="tanggal_terbit" name="tanggal_terbit"
                             value="{{ old('tanggal_terbit') }}"
                             class="form-control rounded-3 @error('tanggal_terbit') is-invalid @enderror">
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Tanggal Jatuh Tempo *</label>
-                        <input type="date" name="tanggal_jatuh_tempo"
+                        <input type="date" id="tanggal_jatuh_tempo" name="tanggal_jatuh_tempo"
                             value="{{ old('tanggal_jatuh_tempo') }}"
-                            class="form-control rounded-3 @error('tanggal_jatuh_tempo') is-invalid @enderror">
+                            class="form-control rounded-3 @error('tanggal_jatuh_tempo') is-invalid @enderror"
+                            readonly>
+                        <div class="form-text text-muted" id="jatuh_tempo_hint"></div>
                     </div>
 
                     <div class="col-12">
@@ -108,17 +113,110 @@
                     <button type="submit" class="btn btn-secondary w-100 mb-2 rounded-3">
                         Simpan Tagihan
                     </button>
-
                     <a href="{{ route('piutang.index') }}" class="btn btn-outline-secondary w-100 rounded-3">
                         Batal
                     </a>
                 </div>
 
             </form>
-
         </div>
     </div>
-
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const noTagihanInput   = document.getElementById('no_tagihan');
+    const namaKlienInput   = document.getElementById('nama_klien');
+    const namaProyekInput  = document.getElementById('nama_proyek');
+    const terminInput      = document.getElementById('termin');
+    const metodeSelect     = document.getElementById('metode_pembayaran');
+    const tanggalTerbit    = document.getElementById('tanggal_terbit');
+    const tanggalJatuhTempo= document.getElementById('tanggal_jatuh_tempo');
+    const infoBox          = document.getElementById('no_tagihan_info');
+    const jatuhTempoHint   = document.getElementById('jatuh_tempo_hint');
+
+    let isAutoFilled = false; // flag: apakah field dikunci dari data sebelumnya
+
+    // ─── 1. Lookup no. tagihan via AJAX ───────────────────────────────────────
+    let lookupTimeout;
+    noTagihanInput.addEventListener('input', function () {
+        const val = this.value.trim();
+        clearTimeout(lookupTimeout);
+
+        if (val === '') {
+            resetAutoFill();
+            return;
+        }
+
+        // Debounce 500ms agar tidak spam request
+        lookupTimeout = setTimeout(() => {
+            fetch(`{{ route('piutang.lookup') }}?no_tagihan=${encodeURIComponent(val)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.found) {
+                        // Isi otomatis & kunci field
+                        namaKlienInput.value  = data.nama_klien;
+                        namaProyekInput.value = data.nama_proyek;
+                        terminInput.value     = data.next_termin;
+                        metodeSelect.value    = data.metode_pembayaran;
+
+                        namaKlienInput.readOnly  = true;
+                        namaProyekInput.readOnly = true;
+                        terminInput.readOnly     = true;
+                        metodeSelect.disabled    = true;
+
+                        infoBox.classList.remove('d-none');
+                        isAutoFilled = true;
+
+                        // Hitung ulang jatuh tempo jika tanggal terbit sudah diisi
+                        hitungJatuhTempo();
+                    } else {
+                        resetAutoFill();
+                    }
+                })
+                .catch(() => resetAutoFill());
+        }, 500);
+    });
+
+    function resetAutoFill() {
+        namaKlienInput.readOnly  = false;
+        namaProyekInput.readOnly = false;
+        terminInput.readOnly     = false;
+        metodeSelect.disabled    = false;
+        infoBox.classList.add('d-none');
+        isAutoFilled = false;
+    }
+
+    // ─── 2. Hitung tanggal jatuh tempo ────────────────────────────────────────
+    function hitungJatuhTempo() {
+        const metode  = metodeSelect.value;
+        const tglStr  = tanggalTerbit.value;
+
+        if (!metode || !tglStr) {
+            tanggalJatuhTempo.value = '';
+            jatuhTempoHint.textContent = '';
+            return;
+        }
+
+        const tgl   = new Date(tglStr);
+        const hari  = metode === 'SKBDN' ? 160 : 30;
+        tgl.setDate(tgl.getDate() + hari);
+
+        // Format ke YYYY-MM-DD untuk input[type=date]
+        const yyyy = tgl.getFullYear();
+        const mm   = String(tgl.getMonth() + 1).padStart(2, '0');
+        const dd   = String(tgl.getDate()).padStart(2, '0');
+        tanggalJatuhTempo.value = `${yyyy}-${mm}-${dd}`;
+
+        jatuhTempoHint.textContent = `Otomatis +${hari} hari dari tanggal terbit (${metode})`;
+    }
+
+    tanggalTerbit.addEventListener('change', hitungJatuhTempo);
+    metodeSelect.addEventListener('change', hitungJatuhTempo);
+});
+</script>
+@endpush
