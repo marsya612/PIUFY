@@ -125,7 +125,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // ═══════════════════════════════════════════
 // routes/web.php  — tambahkan 1 baris ini
 // ═══════════════════════════════════════════
-    Route::get('/piutang/lookup', [PiutangController::class, 'lookup'])->name('piutang.lookup');
+    // Route::get('/piutang/lookup', [PiutangController::class, 'lookup'])->name('piutang.lookup');
 
 
     /*
