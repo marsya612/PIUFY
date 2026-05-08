@@ -307,9 +307,16 @@ class PiutangController extends Controller
 
 
     // 🔹 HALAMAN PROFILE
+    // public function profile()
+    // {
+    //     $user = auth()->user();
+    //     return view('profile', compact('user'));
+    // }
+
     public function profile()
     {
         $user = auth()->user();
+        dd($user->photo); // ← cek hasilnya
         return view('profile', compact('user'));
     }
 
