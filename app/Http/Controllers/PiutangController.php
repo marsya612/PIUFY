@@ -424,6 +424,46 @@ class PiutangController extends Controller
     
     //     return redirect()->route('profile')->with('success', 'Profile updated');
     // }
+    
+    // public function updateProfile(Request $request)
+    // {
+    //     $user = auth()->user();
+    
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'email' => 'required|email|unique:users,email,' . $user->id,
+    //         'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    //     ]);
+    
+    //     if ($request->hasFile('photo')) {
+    //         $imageData = base64_encode(
+    //             file_get_contents($request->file('photo')->getRealPath())
+    //         );
+    
+    //         $response = \Illuminate\Support\Facades\Http::withHeaders([
+    //             'Authorization' => 'Client-ID ' . env('IMGUR_CLIENT_ID'),
+    //         ])->post('https://api.imgur.com/3/image', [
+    //             'image' => $imageData,
+    //             'type' => 'base64',
+    //         ]);
+    
+    //         if ($response->successful()) {
+    //             $user->photo = $response->json()['data']['link'];
+    //         }
+    //     }
+    
+    //     $user->update([
+    //         'name' => $request->name,
+    //         'email' => $request->email,
+    //         'phone' => $request->phone,
+    //         'jabatan' => $request->jabatan,
+    //         'photo' => $user->photo,
+    //     ]);
+    
+    //     return redirect()->route('profile')->with('success', 'Profile updated');
+    // }
+
+
     public function updateProfile(Request $request)
     {
         $user = auth()->user();
@@ -439,15 +479,15 @@ class PiutangController extends Controller
                 file_get_contents($request->file('photo')->getRealPath())
             );
     
-            $response = \Illuminate\Support\Facades\Http::withHeaders([
-                'Authorization' => 'Client-ID ' . env('IMGUR_CLIENT_ID'),
-            ])->post('https://api.imgur.com/3/image', [
+            $response = \Illuminate\Support\Facades\Http::post('https://api.imgbb.com/1/upload', [
+                'key' => env('IMGBB_API_KEY'),
                 'image' => $imageData,
-                'type' => 'base64',
             ]);
     
+            dd($response->json()); // ← debug sementara
+    
             if ($response->successful()) {
-                $user->photo = $response->json()['data']['link'];
+                $user->photo = $response->json()['data']['url'];
             }
         }
     
