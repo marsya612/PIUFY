@@ -141,32 +141,65 @@ class PiutangController extends Controller
         return view('tambahtagihan');
     }
 
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'no_tagihan' => 'required|unique:piutangs,no_tagihan',
+    //         'nama_klien' => 'required',
+    //         'nama_proyek' => 'required',
+    //         'termin' => 'required',
+    //         'nilai_tagihan' => 'required|numeric',
+    //         'metode_pembayaran' => 'required',
+    //         'tanggal_terbit' => 'required|date',
+    //         'tanggal_jatuh_tempo' => 'required|date',
+    //         'catatan' => 'nullable',
+    //     ]);
+
+    //     // default status
+    //     $validated['status'] = 'belum';
+
+    //     // 🔥 WAJIB: simpan sesuai user login
+    //     $validated['user_id'] = Auth::id();
+
+    //     Piutang::create($validated);
+
+    //     return redirect()->route('piutang.index')
+    //         ->with('success', 'Tagihan berhasil ditambahkan');
+    // }
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'no_tagihan' => 'required|unique:piutangs,no_tagihan',
-            'nama_klien' => 'required',
-            'nama_proyek' => 'required',
-            'termin' => 'required',
-            'nilai_tagihan' => 'required|numeric',
-            'metode_pembayaran' => 'required',
-            'tanggal_terbit' => 'required|date',
-            'tanggal_jatuh_tempo' => 'required|date',
-            'catatan' => 'nullable',
+        $request->validate([
+            'no_tagihan'          => 'required|string',
+            // ⚠️ HAPUS 'unique:piutangs' — no_tagihan boleh sama (multi termin)
+            // Tapi kombinasi no_tagihan + termin harus unik:
+            'no_tagihan'          => [
+                'required',
+                'string',
+                \Illuminate\Validation\Rule::unique('piutangs')->where(function ($query) use ($request) {
+                    return $query->where('termin', $request->termin);
+                }),
+            ],
+            'nama_klien'          => 'required|string|max:255',
+            'nama_proyek'         => 'required|string|max:255',
+            'termin'              => 'required|string|max:100',
+            'nilai_tagihan'       => 'required|numeric|min:0',
+            'metode_pembayaran'   => 'required|in:Reguler,SKBDN',
+            'tanggal_terbit'      => 'required|date',
+            'tanggal_jatuh_tempo' => 'required|date|after_or_equal:tanggal_terbit',
+            'catatan'             => 'nullable|string',
+        ], [
+            'no_tagihan.unique' => 'Kombinasi No. Tagihan dan Termin ini sudah ada.',
         ]);
-
-        // default status
-        $validated['status'] = 'belum';
-
-        // 🔥 WAJIB: simpan sesuai user login
-        $validated['user_id'] = Auth::id();
-
-        Piutang::create($validated);
-
+    
+        Piutang::create($request->only([
+            'no_tagihan', 'nama_klien', 'nama_proyek', 'termin',
+            'nilai_tagihan', 'metode_pembayaran',
+            'tanggal_terbit', 'tanggal_jatuh_tempo', 'catatan',
+        ]));
+    
         return redirect()->route('piutang.index')
-            ->with('success', 'Tagihan berhasil ditambahkan');
+            ->with('success', 'Tagihan berhasil ditambahkan.');
     }
-
     
     /**
      * Lookup data tagihan berdasarkan no_tagihan.
