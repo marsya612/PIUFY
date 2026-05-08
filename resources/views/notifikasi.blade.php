@@ -22,7 +22,12 @@
                             ✓ Tandai Dibaca
                         </button>
                     @endif
+                    <!-- <button class="btn btn-sm btn-outline-danger"
+                        onclick="hapusNotif({{ $item->id }})">
+                        🗑 Hapus
+                    </button> -->
                     <button class="btn btn-sm btn-outline-danger"
+                        style="opacity: 1 !important;"
                         onclick="hapusNotif({{ $item->id }})">
                         🗑 Hapus
                     </button>
