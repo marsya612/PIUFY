@@ -166,6 +166,50 @@ class PiutangController extends Controller
         return redirect()->route('piutang.index')
             ->with('success', 'Tagihan berhasil ditambahkan');
     }
+
+    
+    /**
+     * Lookup data tagihan berdasarkan no_tagihan.
+     * Dipakai oleh AJAX di form create.
+     */
+    public function lookup(Request $request)
+    {
+        $no = $request->query('no_tagihan');
+    
+        // Ambil semua tagihan dengan no_tagihan yang sama, urutkan termin terbaru
+        $tagihans = \App\Models\Piutang::where('no_tagihan', $no)
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
+        if ($tagihans->isEmpty()) {
+            return response()->json(['found' => false]);
+        }
+    
+        $latest = $tagihans->first(); // data terbaru (untuk termin & metode)
+        $first  = $tagihans->last();  // data pertama (untuk klien & proyek)
+    
+        // ── Hitung next termin ──────────────────────────────────────────────────
+        // Asumsi format termin: "Termin 1", "Termin 2", dst.
+        // Jika format berbeda, sesuaikan regex di bawah.
+        $lastTermin  = $latest->termin ?? '';
+        $nextTermin  = $lastTermin;   // fallback
+    
+        if (preg_match('/(\d+)\s*$/', $lastTermin, $matches)) {
+            $num        = (int) $matches[1] + 1;
+            $nextTermin = preg_replace('/\d+\s*$/', $num, $lastTermin);
+        } else {
+            // Jika tidak ada angka di akhir, tambahkan " 2"
+            $nextTermin = trim($lastTermin) . ' 2';
+        }
+    
+        return response()->json([
+            'found'              => true,
+            'nama_klien'         => $first->nama_klien,
+            'nama_proyek'        => $first->nama_proyek,
+            'metode_pembayaran'  => $first->metode_pembayaran,
+            'next_termin'        => $nextTermin,
+        ]);
+    }
     public function edit($id)
     {
         $piutang = Piutang::findOrFail($id);
