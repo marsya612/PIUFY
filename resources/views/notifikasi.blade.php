@@ -9,11 +9,9 @@
                 id="notif-{{ $item->id }}"
                 style="{{ $item->is_read ? 'opacity: 0.4' : '' }}">
                 <div>
-                    <strong>{{ $item->nama_klien }}</strong><br>
-                    {{ $item->nama_proyek }}<br>
-                    <span class="text-muted">
-                        Jatuh tempo {{ $item->sisaHari }} hari lagi
-                    </span>
+                    <span class="text-muted small">{{ $item->no_tagihan }}</span><br>
+                    <strong>{{ $item->nama_klien }}</strong> &mdash; {{ $item->nama_proyek }}<br>
+                    <span class="text-muted small">Jatuh tempo {{ $item->sisaHari }} hari lagi</span>
                 </div>
                 <div class="d-flex align-items-center gap-2">
                     @if($item->is_read)
