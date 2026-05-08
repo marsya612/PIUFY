@@ -121,6 +121,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/piutang/{id}/lunas', [PiutangController::class, 'markLunas'])
         ->name('piutang.lunas');
 
+    
+// ═══════════════════════════════════════════
+// routes/web.php  — tambahkan 1 baris ini
+// ═══════════════════════════════════════════
+    Route::get('/piutang/lookup', [PiutangController::class, 'lookup'])->name('piutang.lookup');
+
+
     /*
     |--------------------------
     | LAPORAN
