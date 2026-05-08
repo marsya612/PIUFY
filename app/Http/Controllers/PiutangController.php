@@ -474,18 +474,33 @@ class PiutangController extends Controller
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
     
+        // if ($request->hasFile('photo')) {
+        //     $imageData = base64_encode(
+        //         file_get_contents($request->file('photo')->getRealPath())
+        //     );
+    
+        //     $response = \Illuminate\Support\Facades\Http::post('https://api.imgbb.com/1/upload', [
+        //         'key' => env('IMGBB_API_KEY'),
+        //         'image' => $imageData,
+        //     ]);
+    
+        //     dd(env('IMGBB_API_KEY'), $response->json());// ← debug sementara
+    
+        //     if ($response->successful()) {
+        //         $user->photo = $response->json()['data']['url'];
+        //     }
+        // }
         if ($request->hasFile('photo')) {
             $imageData = base64_encode(
                 file_get_contents($request->file('photo')->getRealPath())
             );
-    
-            $response = \Illuminate\Support\Facades\Http::post('https://api.imgbb.com/1/upload', [
-                'key' => env('IMGBB_API_KEY'),
+        
+            $response = \Illuminate\Support\Facades\Http::post('https://api.imgbb.com/1/upload?key=' . env('IMGBB_API_KEY'), [
                 'image' => $imageData,
             ]);
-    
-            dd(env('IMGBB_API_KEY'), $response->json());// ← debug sementara
-    
+        
+            dd(env('IMGBB_API_KEY'), $response->json());
+        
             if ($response->successful()) {
                 $user->photo = $response->json()['data']['url'];
             }
