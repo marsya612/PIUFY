@@ -14,11 +14,11 @@
             <div class="row align-items-center">
 
                 <!-- FOTO -->
-                <div class="col-md-4 text-center">
+                <!-- <div class="col-md-4 text-center">
 
                     @if($user->photo)
                         <img id="previewImage"
-                            <!-- src="{{ asset('storage/' . $user->photo) }}" -->
+                            src="{{ asset('storage/' . $user->photo) }}"
                             src="{{ $user->photo }}" 
                             class="rounded-circle shadow"
                             style="width:200px; height:200px; object-fit:cover;">
@@ -38,6 +38,26 @@
                         <input type="file" name="photo" class="form-control" accept="image/*" onchange="previewFoto(event)">
                     </div>
 
+                </div> -->
+                <div class="col-md-4 text-center">
+                    @if($user->photo)
+                        <img id="previewImage"
+                            src="{{ $user->photo }}" 
+                            class="rounded-circle shadow"
+                            style="width:200px; height:200px; object-fit:cover;">
+                    @else
+                        <div id="previewContainer"
+                            class="rounded-circle bg-light d-flex align-items-center justify-content-center"
+                            style="width:200px; height:200px; margin:auto;">
+                            <i class="bi bi-person" style="font-size:80px; color:#bbb;"></i>
+                        </div>
+                        <img id="previewImage"
+                            class="rounded-circle shadow"
+                            style="display:none; width:200px; height:200px; object-fit:cover;">
+                    @endif
+                    <div class="mt-3">
+                        <input type="file" name="photo" class="form-control" accept="image/*" onchange="previewFoto(event)">
+                    </div>
                 </div>
 
                 <!-- DATA -->
