@@ -492,11 +492,8 @@ class PiutangController extends Controller
                 ]);
         
             // dd(env('IMGBB_API_KEY'), $response->json());
-        
             if ($response->successful()) {
-                // $user->photo = $response->json()['data']['url'];
-                $user->photo = $response->json()['data'];
-                $user->photo = $data['image']['url'];
+                $user->photo = $response->json()['data']['display_url'];
             }
         }
     
