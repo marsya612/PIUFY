@@ -132,6 +132,14 @@
     <!-- <div class="logo">
         <img src="{{ public_path('images/logo.png') }}">
     </div> -->
+    <!-- <div class="logo">
+        @php
+            $logoPath = public_path('images/logo.png');
+            $logoBase64 = base64_encode(file_get_contents($logoPath));
+            $logoSrc = 'data:image/png;base64,' . $logoBase64;
+        @endphp
+        <img src="{{ $logoSrc }}" style="height:50px;">
+    </div> -->
     <div class="logo">
         @php
             $logoPath = public_path('images/logo.png');
