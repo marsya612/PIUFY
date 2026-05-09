@@ -21,22 +21,6 @@ class AuthController extends Controller
     }
 
     // 🔹 PROSES LOGIN
-    // public function login(Request $request)
-    // {
-    //     $credentials = $request->validate([
-    //         'email' => 'required|email',
-    //         'password' => 'required',
-    //     ]);
-
-    //     if (Auth::attempt($credentials, $request->remember)) {
-    //         $request->session()->regenerate();
-    //         return redirect()->route('piutang.index');
-    //     }
-
-    //     return back()->withErrors([
-    //         'email' => 'Email atau password salah',
-    //     ])->withInput();
-    // }
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -72,110 +56,6 @@ class AuthController extends Controller
     }
 
     // 🔹 PROSES REGISTER (FIXED)
-    // public function register(Request $request)
-    // {
-
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'required|email|unique:users,email',
-    //         'phone' => 'required',
-    //         'divisi' => 'required',
-    //         'jabatan' => 'required',
-    //         'password' => 'required|min:6|confirmed',
-    //     ]);
-
-    //     $user = User::create([
-    //         'name'     => $request->name,
-    //         'email'    => $request->email,
-    //         'password' => Hash::make($request->password),
-    //         'phone'    => $request->phone,
-    //         'jabatan'  => $request->jabatan,
-    //         'divisi'   => 'Keuangan', // 🔥 hardcode di sini
-    //         'photo'    => $photoPath,
-    //     ]);
-
-    //     return redirect()->route('login')->with('success', 'Register berhasil');
-    // }
-    // public function register(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required',
-    //         'email' => 'required|email|unique:users',
-    //         'phone' => 'required',
-    //         'jabatan' => 'required',
-    //         'password' => 'required|confirmed|min:6',
-    //     ]);
-
-    //     User::create([
-    //         'name' => $request->name,
-    //         'email' => $request->email,
-    //         'phone' => $request->phone,
-    //         'divisi' => 'Keuangan', // default
-    //         'jabatan' => $request->jabatan,
-    //         'password' => bcrypt($request->password),
-    //     ]);
-
-    //     // 🔥 redirect + kirim pesan sukses
-    //     // return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
-    //     event(new Registered($user));
-
-    //     return redirect()->route('verification.notice')
-    //         ->with('success', 'Silakan cek email untuk verifikasi akun');
-    // }
-    
-// public function register(Request $request)
-// {
-//     $request->validate([
-//         'name' => 'required',
-//         'email' => 'required|email|unique:users,email',
-//         'phone' => 'required',
-//         'jabatan' => 'required',
-//         'password' => 'required|confirmed|min:6',
-//     ]);
-
-//     $user = User::create([
-//         'name' => $request->name,
-//         'email' => $request->email,
-//         'phone' => $request->phone,
-//         'jabatan' => $request->jabatan,
-//         'divisi' => 'Keuangan',
-//         'password' => $request->password,
-//     ]);
-
-//     // ✅ LOGIN DULU
-//     Auth::login($user);
-
-//     // ✅ KIRIM EMAIL
-//     event(new Registered($user));
-
-//     return redirect()->route('verification.notice')
-//         ->with('success', 'Silakan cek email untuk verifikasi akun');
-// }
-    
-    // public function register(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required',
-    //         'email' => 'required|email|unique:users,email',
-    //         'phone' => 'required',
-    //         'jabatan' => 'required',
-    //         'password' => 'required|confirmed|min:6',
-    //     ]);
-    
-    //     $user = User::create([
-    //         'name' => $request->name,
-    //         'email' => $request->email,
-    //         'phone' => $request->phone,
-    //         'jabatan' => $request->jabatan,
-    //         'divisi' => 'Keuangan',
-    //         'password' => Hash::make($request->password), // ✅ WAJIB
-    //     ]);
-    
-    //     event(new Registered($user)); // ✅ kirim email
-    
-    //     return redirect()->route('login')
-    //         ->with('success', 'Registrasi berhasil! Cek email untuk verifikasi.');
-    // }
 
     public function register(Request $request)
     {
@@ -196,15 +76,6 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
     
-        // 🔥 BUAT LINK VERIFIKASI
-        // $verificationUrl = URL::temporarySignedRoute(
-        //     'verification.verify',
-        //     now()->addMinutes(60),
-        //     [
-        //         'id' => $user->id,
-        //         'hash' => sha1($user->email),
-        //     ]
-        // );
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify',
             Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
@@ -229,12 +100,65 @@ class AuthController extends Controller
             ],
             'subject' => 'Verifikasi Email',
             'htmlContent' => "
-                <h2>Halo {$user->name}</h2>
-                <p>Silakan klik tombol di bawah untuk verifikasi akun:</p>
-                <a href='{$verificationUrl}' 
-                   style='padding:10px 15px;background:black;color:white;text-decoration:none;'>
-                   Verifikasi Email
-                </a>
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset='UTF-8'>
+              <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+            </head>
+            <body style='margin:0;padding:0;background-color:#f4f6f9;font-family:Arial,sans-serif;'>
+              <table width='100%' cellpadding='0' cellspacing='0' style='padding:40px 20px;'>
+                <tr>
+                  <td align='center'>
+                    <table width='520' cellpadding='0' cellspacing='0' style='background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);'>
+                      
+                      <!-- Header -->
+                      <tr>
+                        <td style='background:#0f1b3d;padding:36px 40px;text-align:center;'>
+                          <h1 style='margin:0;color:#ffffff;font-size:28px;font-weight:800;letter-spacing:2px;'>PiUFY</h1>
+                          <p style='margin:6px 0 0;color:#a0aec0;font-size:13px;letter-spacing:1px;'>Piutang Management System</p>
+                        </td>
+                      </tr>
+            
+                      <!-- Body -->
+                      <tr>
+                        <td style='padding:40px 40px 20px;'>
+                          <h2 style='margin:0 0 12px;color:#0f1b3d;font-size:22px;'>Halo, {$user->name} 👋</h2>
+                          <p style='margin:0 0 24px;color:#4a5568;font-size:15px;line-height:1.7;'>
+                            Terima kasih telah mendaftar di <strong>Piufy</strong>. Klik tombol di bawah untuk memverifikasi email kamu dan mulai menggunakan akun.
+                          </p>
+            
+                          <!-- Button -->
+                          <table cellpadding='0' cellspacing='0' style='margin:0 0 32px;'>
+                            <tr>
+                              <td style='background:#0f1b3d;border-radius:10px;'>
+                                <a href='{$verificationUrl}' 
+                                   style='display:inline-block;padding:14px 32px;color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;letter-spacing:0.5px;'>
+                                  ✦ Verifikasi Email Sekarang
+                                </a>
+                              </td>
+                            </tr>
+                          </table>
+            
+                          <p style='margin:0;color:#718096;font-size:13px;line-height:1.6;'>
+                            Link ini akan kedaluwarsa dalam <strong>60 menit</strong>. Jika kamu tidak merasa mendaftar, abaikan email ini.
+                          </p>
+                        </td>
+                      </tr>
+            
+                      <!-- Footer -->
+                      <tr>
+                        <td style='padding:24px 40px;border-top:1px solid #e2e8f0;text-align:center;'>
+                          <p style='margin:0;color:#a0aec0;font-size:12px;'>© 2026 Piufy · Piutang Management System</p>
+                        </td>
+                      </tr>
+            
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </body>
+            </html>
             ",
         ]);
     
