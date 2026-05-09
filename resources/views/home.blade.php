@@ -16,7 +16,7 @@ function rupiah($angka){
     <p class="text-muted mb-4">Selamat datang, PT Trocon Indah Perkasa</p>
 
     <!-- CARDS -->
-    <div class="row g-3 mb-4">
+    <!-- <div class="row g-3 mb-4">
 
         <div class="col-md-3">
             <div class="p-3 bg-light rounded-3">
@@ -50,6 +50,44 @@ function rupiah($angka){
             </div>
         </div>
 
+    </div> -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="p-3 rounded-3" style="background-color: #eeedfb;">
+                <small style="color: #6b63c4;">Total Piutang</small>
+                <h5 class="fw-bold" style="color: #2d2580;">{{ rupiah($totalPiutang) }}</h5>
+                <span class="badge" style="background-color: #d4d2f7; color: #2d2580;">
+                    {{ $totalTagihanAktif }} Tagihan Aktif
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-3 rounded-3" style="background-color: #fdecea;">
+                <small style="color: #c0392b;">Tertunggak</small>
+                <h5 class="fw-bold" style="color: #922b21;">{{ rupiah($totalTertunggak) }}</h5>
+                <span class="badge" style="background-color: #f5b7b1; color: #922b21;">
+                    {{ $countTertunggak }} Tagihan
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-3 rounded-3" style="background-color: #fef9e7;">
+                <small style="color: #d4a017;">Jatuh Tempo ≤ 7 Hari</small>
+                <h5 class="fw-bold" style="color: #9a6a00;">{{ rupiah($totalJatuhTempo) }}</h5>
+                <span class="badge" style="background-color: #fdeaa0; color: #9a6a00;">
+                    {{ $countJatuhTempo }} Tagihan
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-3 rounded-3" style="background-color: #eafaf1;">
+                <small style="color: #1e8449;">Lunas Bulan Ini</small>
+                <h5 class="fw-bold" style="color: #145a32;">{{ rupiah($totalLunas) }}</h5>
+                <span class="badge" style="background-color: #a9dfbf; color: #145a32;">
+                    {{ $countLunas }} Tagihan
+                </span>
+            </div>
+        </div>
     </div>
 
     <div class="row g-4">
