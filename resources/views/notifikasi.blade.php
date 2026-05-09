@@ -26,11 +26,19 @@
                         onclick="hapusNotif({{ $item->id }})">
                         🗑 Hapus
                     </button> -->
-                    <button class="btn btn-sm btn-outline-danger"
+                    <!-- <button class="btn btn-sm btn-outline-danger"
                         style="opacity: 1 !important;"
                         onclick="hapusNotif({{ $item->id }})">
                         🗑 Hapus
-                    </button>
+                    </button> -->
+                    <form action="{{ route('notifikasi.hapus', $item->id) }}" method="POST"
+                        onsubmit="return confirm('Hapus notifikasi ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            🗑 Hapus
+                        </button>
+                    </form>
                 </div>
             </div>
             @empty
@@ -117,35 +125,35 @@ function bacaNotif(id) {
 //     })
 //     .catch(error => console.error('Error:', error));
 // }
-function hapusNotif(id) {
-    if (!confirm('Hapus notifikasi ini?')) return;
-    const token = document.querySelector('meta[name="csrf-token"]');
-    fetch(`/notifikasi/hapus/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': token ? token.getAttribute('content') : '{{ csrf_token() }}',
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        console.log('Status code:', response.status); // ← cek ini
-        return response.json();
-    })
-    .then(data => {
-        console.log('Data dari server:', data); // ← cek ini
-        if (data.success) {
-            const el = document.getElementById(`notif-${id}`);
-            console.log('Element ditemukan:', el); // ← cek ini
-            if (el) {
-                el.remove();
-                const cardBody = document.querySelector('.card-body');
-                if (!cardBody.querySelector('[id^="notif-"]')) {
-                    cardBody.innerHTML = '<div class="text-center text-muted">Tidak ada notifikasi</div>';
-                }
-            }
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
+// function hapusNotif(id) {
+//     if (!confirm('Hapus notifikasi ini?')) return;
+//     const token = document.querySelector('meta[name="csrf-token"]');
+//     fetch(`/notifikasi/hapus/${id}`, {
+//         method: 'DELETE',
+//         headers: {
+//             'X-CSRF-TOKEN': token ? token.getAttribute('content') : '{{ csrf_token() }}',
+//             'Content-Type': 'application/json'
+//         }
+//     })
+//     .then(response => {
+//         console.log('Status code:', response.status); // ← cek ini
+//         return response.json();
+//     })
+//     .then(data => {
+//         console.log('Data dari server:', data); // ← cek ini
+//         if (data.success) {
+//             const el = document.getElementById(`notif-${id}`);
+//             console.log('Element ditemukan:', el); // ← cek ini
+//             if (el) {
+//                 el.remove();
+//                 const cardBody = document.querySelector('.card-body');
+//                 if (!cardBody.querySelector('[id^="notif-"]')) {
+//                     cardBody.innerHTML = '<div class="text-center text-muted">Tidak ada notifikasi</div>';
+//                 }
+//             }
+//         }
+//     })
+//     .catch(error => console.error('Error:', error));
+// }
 </script>
 @endsection
