@@ -24,9 +24,16 @@
             align-self: flex-start;
         }
 
-        .left-panel .logo img {
+        /* .left-panel .logo img {
             height: 36px;
             filter: brightness(0) invert(1);
+        } */
+        .left-panel .logo img {
+            height: 60px;
+            width: auto;
+            max-width: 200px;
+            filter: brightness(0) invert(1);
+            display: block;
         }
 
         .left-panel h1 {
