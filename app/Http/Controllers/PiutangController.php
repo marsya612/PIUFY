@@ -674,7 +674,7 @@ class PiutangController extends Controller
     
         $notifikasi = Piutang::where('status', '!=', 'lunas')
             ->where('user_id', Auth::id())
-            ->where('is_dismissed', false)
+            // ->where('is_dismissed', false)
             ->get()
             ->filter(function ($item) use ($today) {
                 $sisaHari = (int) $today->diffInDays(
