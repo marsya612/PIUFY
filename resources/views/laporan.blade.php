@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(`/laporan-data?from=${from}&to=${to}&status=${statusFilter}&klien=${klien}`)
             .then(res => res.json())
             .then(data => {
-                console.log('Data dari API:', data); // DEBUG
+                // console.log('Data dari API:', data); // DEBUG
 
                 if (!Array.isArray(data) || data.length === 0) {
                     document.getElementById('tableBody').innerHTML =
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     grouped[status].push({ status, nama_klien: nama, nilai_tagihan: nilai });
                 });
 
-                console.log('Grouped:', grouped); // DEBUG
+                // console.log('Grouped:', grouped); // DEBUG
 
                 let html = '';
 
@@ -172,26 +172,39 @@ document.addEventListener('DOMContentLoaded', function () {
                 }); // ✅ tutup Object.keys forEach dulu
 
                 // ✅ PERBAIKAN: baris TOTAL ditambahkan ke html SEBELUM set innerHTML
+                // html += `
+                //     <tr style="background-color:#13094d;">
+                //         <td colspan="2" style="color:white;font-weight:700;font-size:13px;">
+                //             TOTAL KESELURUHAN
+                //         </td>
+                //         <td class="text-center" style="color:white;font-weight:700;">${totalQty}</td>
+                //         <td class="text-end" style="color:white;font-weight:700;">
+                //             Rp${totalNilai.toLocaleString('id-ID')}
+                //         </td>
+                //     </tr>
+                // `;
                 html += `
-                    <tr style="background-color:#13094d;">
-                        <td colspan="2" style="color:white;font-weight:700;font-size:13px;">
+                    <tr style="background-color:#13094d !important; border: 2px solid #13094d !important;">
+                        <td colspan="2" style="color:#ffffff !important; font-weight:700; font-size:13px; padding:12px 8px; background-color:#13094d !important;">
                             TOTAL KESELURUHAN
                         </td>
-                        <td class="text-center" style="color:white;font-weight:700;">${totalQty}</td>
-                        <td class="text-end" style="color:white;font-weight:700;">
-                            Rp${totalNilai.toLocaleString('id-ID')}
+                        <td class="text-center" style="color:#ffffff !important; font-weight:700; padding:12px 8px; background-color:#13094d !important;">
+                            ${totalQty}
+                        </td>
+                        <td class="text-end" style="color:#ffffff !important; font-weight:700; padding:12px 8px; background-color:#13094d !important;">
+                            Rp${Number(totalNilai).toLocaleString('id-ID')}
                         </td>
                     </tr>
                 `;
 
-                console.log('totalQty:', totalQty, '| totalNilai:', totalNilai); // DEBUG
-                console.log('HTML final:', html); // DEBUG
+                // console.log('totalQty:', totalQty, '| totalNilai:', totalNilai); // DEBUG
+                // console.log('HTML final:', html); // DEBUG
 
                 // ✅ PERBAIKAN: innerHTML di-set PALING AKHIR setelah html lengkap
                 document.getElementById('tableBody').innerHTML = html;
             })
             .catch(err => {
-                console.error(err);
+                // console.error(err);
                 document.getElementById('tableBody').innerHTML =
                     `<tr><td colspan="4" class="text-center text-danger py-4">Gagal mengambil data</td></tr>`;
             });
