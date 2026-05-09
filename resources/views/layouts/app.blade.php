@@ -92,6 +92,19 @@
             transform: scale(1.1);
             transition: 0.2s;
         }
+
+        .notif-bell {
+            color: #6c757d;
+            transition: color 0.2s;
+        }
+        
+        .notif-bell:hover {
+            color: #212529 !important;
+        }
+        
+        .notif-bell-icon {
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
