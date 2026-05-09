@@ -11,13 +11,37 @@
         <div class="d-flex align-items-center gap-3">
 
             <!-- Notification -->
-            {{-- <div class="position-relative">
-                <span style="font-size: 18px;">🔔</span>
-            </div> --}}
+            <a href="{{ route('notifikasi') }}" class="position-relative text-decoration-none notif-bell">
+                
+                @php
+                    $today = now()->startOfDay();
+                    $jumlahNotif = \App\Models\Piutang::where('status', '!=', 'lunas')
+                        ->where('user_id', Auth::id())
+                        ->where('is_read', false)
+                        ->get()
+                        ->filter(function ($item) use ($today) {
+                            $sisaHari = (int) $today->diffInDays(
+                                \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay(),
+                                false
+                            );
+                            return in_array($sisaHari, [7, 5, 3]);
+                        })->count();
+                @endphp
+            
+                @if($jumlahNotif > 0)
+                    <i class="bi bi-bell-fill notif-bell-icon"></i>
+                @else
+                    <i class="bi bi-bell notif-bell-icon"></i>
+                @endif
+            
+                @if($jumlahNotif > 0)
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                          style="font-size: 10px;">
+                        {{ $jumlahNotif }}
+                    </span>
+                @endif
+            </a>
             <!-- <a href="{{ route('notifikasi') }}" class="position-relative text-decoration-none">
-                <span style="font-size: 18px;">🔔</span>
-            </a> -->
-            <a href="{{ route('notifikasi') }}" class="position-relative text-decoration-none">
                 <span style="font-size: 18px;">🔔</span>
                 
                 @php
@@ -41,7 +65,7 @@
                         {{ $jumlahNotif }}
                     </span>
                 @endif
-            </a>
+            </a> -->
 
             <!-- User Info -->
             <a href="{{ route('profile') }}" class="text-decoration-none text-dark">
