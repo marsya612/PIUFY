@@ -10,6 +10,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\ReminderPiutangMail;
+use App\Models\Notifikasi;
 // use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class PiutangController extends Controller
