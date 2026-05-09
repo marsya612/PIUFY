@@ -167,12 +167,12 @@
 {{-- LEFT PANEL --}}
 <div class="left-panel">
     <div class="logo">
-        <span>piufy</span>
+        <img src="{{ asset('images/logo.png') }}" alt="Piufy">
     </div>
-    <div>
-        <div class="badge-pill">✦ Piutang Management System</div>
-        <h1>Mulai kelola<br>keuangan kamu<br>sekarang.</h1>
-        <p>Daftar dan nikmati kemudahan monitor tagihan & laporan piutang dalam satu platform.</p>
+    <div class="badge-pill" style="align-self: center;">✦ Piutang Management System</div>
+    <div style="text-align: left;">
+        <h1>Kelola piutang<br>lebih mudah<br>& efisien.</h1>
+        <p>Monitor tagihan, pantau jatuh tempo, dan kelola laporan keuangan dalam satu platform.</p>
     </div>
 </div>
 
