@@ -708,12 +708,19 @@ class PiutangController extends Controller
         return response()->json(['success' => true]);
     }
 
+    // public function hapus($id)
+    // {
+    //     $notif = Notifikasi::findOrFail($id);
+    //     $notif->delete();
+    
+    //     return response()->json(['success' => true]);
+    // }
     public function hapus($id)
     {
         $notif = Notifikasi::findOrFail($id);
         $notif->delete();
     
-        return response()->json(['success' => true]);
+        return redirect()->route('notifikasi')->with('success', 'Notifikasi dihapus');
     }
 
 }
