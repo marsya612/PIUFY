@@ -92,7 +92,7 @@
             transform: scale(1.1);
             transition: 0.2s;
         } */
-        .profile-hover {
+        /* .profile-hover {
             transition: all 0.2s ease;
             cursor: pointer;
         }
@@ -101,6 +101,19 @@
             background-color: #dee2e6;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .profile-hover:active {
+            transform: scale(0.96);
+        } */
+        .profile-hover {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .profile-hover:hover {
+            background-color: #dee2e6;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         }
         
         .profile-hover:active {
