@@ -70,29 +70,42 @@
             vertical-align: middle;
         }
 
+        /* .profile-hover {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        } */
+
+        /* hover lebih kontras dari bg-light */
+        /* .profile-hover:hover {
+            background-color: #dee2e6; /* lebih gelap dari bg-light */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        } */
+
+        /* efek klik */
+        /* .profile-hover:active {
+            transform: scale(0.96);
+        } */
+
+        /* foto ikut efek */
+        /* .profile-hover:hover .profile-img {
+            transform: scale(1.1);
+            transition: 0.2s;
+        } */
         .profile-hover {
             transition: all 0.2s ease;
             cursor: pointer;
         }
-
-        /* hover lebih kontras dari bg-light */
+        
         .profile-hover:hover {
-            background-color: #dee2e6; /* lebih gelap dari bg-light */
+            background-color: #dee2e6;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-
-        /* efek klik */
+        
         .profile-hover:active {
             transform: scale(0.96);
         }
-
-        /* foto ikut efek */
-        .profile-hover:hover .profile-img {
-            transform: scale(1.1);
-            transition: 0.2s;
-        }
-
         .notif-bell {
             color: #6c757d;
             transition: color 0.2s;
