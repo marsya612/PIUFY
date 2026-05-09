@@ -12,13 +12,6 @@ use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\AuthController;
 
 
-Route::get('/run-migrate', function () {
-    Artisan::call('migrate', [
-        '--force' => true,
-        '--path' => 'database/migrations/2026_05_09_111407_add_is_dismissed_to_piutangs_table.php'
-    ]);
-    return Artisan::output();
-});
 /*
 |--------------------------------------------------------------------------
 | GUEST ROUTES
