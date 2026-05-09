@@ -68,9 +68,9 @@ Route::middleware('guest')->group(function () {
 // })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 // halaman notice verifikasi email
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+// Route::get('/email/verify', function () {
+//     return view('auth.verify-email');
+// })->middleware('auth')->name('verification.notice');
 
 
 // 🔥 STEP 1: buka halaman konfirmasi (TIDAK langsung verifikasi)
@@ -78,16 +78,26 @@ Route::get('/email/verify', function () {
 //     return view('auth.confirm-verify', compact('id', 'hash'));
 // })->middleware(['signed'])->name('verification.verify');
 
-Route::get('/email/verify/{id}/{hash}', function ($id, $hash) {
+// Route::get('/email/verify/{id}/{hash}', function ($id, $hash) {
 
-    // 🔥 LOGINKAN USER DARI LINK
+//     // 🔥 LOGINKAN USER DARI LINK
+//     $user = User::findOrFail($id);
+//     Auth::login($user);
+
+//     return view('auth.confirm-verify', compact('id', 'hash'));
+
+// })->middleware(['signed'])->name('verification.verify');
+
+Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
+    if (! $request->hasValidSignature()) {
+        abort(403, 'Invalid signature.');
+    }
+
     $user = User::findOrFail($id);
     Auth::login($user);
-
+    
     return view('auth.confirm-verify', compact('id', 'hash'));
-
-})->middleware(['signed'])->name('verification.verify');
-
+})->name('verification.verify');
 
 // 🔥 STEP 2: klik tombol baru verifikasi
 Route::post('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
