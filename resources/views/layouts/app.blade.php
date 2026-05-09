@@ -31,7 +31,7 @@
             align-items: stretch;
         }
 
-        .sidebar {
+        /* .sidebar {
             width: 240px;
             background: #fff;
             border-right: 1px solid #ddd;
@@ -44,22 +44,45 @@
             border-radius: 6px;
             padding: 8px 12px;
             transition: background-color 0.2s;
-        }
+        } */
 
         /* HOVER */
-        .sidebar-menu .nav-link:hover {
+        /* .sidebar-menu .nav-link:hover {
             background-color: #f1f3f5;
             color: #000;
-        }
+        } */
 
         /* ACTIVE (menu yang sedang dibuka) */
-        .sidebar-menu .nav-link.active {
+        /* .sidebar-menu .nav-link.active {
             background-color: #e9ecef;
             font-weight: 600;
             color: #000;
-        }    
+        }     */
 
-
+        .sidebar {
+            width: 240px;
+            background: #13094d;
+            border-right: none;
+        }
+        
+        .sidebar-menu .nav-link {
+            color: rgba(255, 255, 255, 0.75);
+            border-radius: 6px;
+            padding: 8px 12px;
+            transition: background-color 0.2s;
+        }
+        
+        .sidebar-menu .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        
+        .sidebar-menu .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-weight: 600;
+        }
+        
         .badge-status {
             border-radius: 12px;
             padding: 5px 10px;
