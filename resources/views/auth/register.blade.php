@@ -8,7 +8,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; }
 
-        .left-panel {
+        /* .left-panel {
             width: 45%;
             background-color: #13094d;
             display: flex;
@@ -43,8 +43,49 @@
             color: rgba(255,255,255,0.6);
             max-width: 320px;
             line-height: 1.7;
-        }
+        } */
 
+        .left-panel {
+            width: 55%;
+            background-color: #13094d;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            color: white;
+            text-align: center;
+        }
+        
+        .left-panel .logo {
+            margin-bottom: 2rem;
+            align-self: center;
+            text-align: center;
+        }
+        
+        .left-panel .logo img {
+            height: 120px;
+            width: auto;
+            max-width: 260px;
+            filter: brightness(0) invert(1);
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .left-panel h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+        
+        .left-panel p {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+            max-width: 320px;
+            line-height: 1.7;
+        }
+        
         .badge-pill {
             display: inline-block;
             background: rgba(255,255,255,0.1);
