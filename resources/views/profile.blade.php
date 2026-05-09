@@ -1,83 +1,69 @@
 @extends('layouts.app')
-
 @section('title', 'Profile Pengguna')
-
 @section('content')
 <div class="p-4">
+    <h4 class="fw-semibold mb-4">Profile Pengguna</h4>
 
-    <h3 class="fw-bold mb-4">Profile Pengguna</h3>
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4">
 
-    <div class="card shadow-sm border-0 rounded-4 p-4">
-        <div class="row align-items-center">
-
-            <!-- FOTO -->
-            <!-- <div class="col-md-4 text-center">
-                @if($user->photo)
-                    <img src="{{ $user->photo }}" 
-                         alt="foto profil" 
-                         class="rounded-circle" 
-                         style="width:200px; height:200px; object-fit:cover;">
-                @else
-                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center"
-                        style="width:200px; height:200px; margin:auto;">
-                        <i class="bi bi-person" style="font-size:80px; color:#bbb;"></i>
-                    </div>
-                @endif
-            </div> -->
-
-            <!-- DATA -->
-            <div class="col-md-8">
-
-                <div class="mb-3">
-                    <label>Nama</label>
-                    <input type="text" class="form-control" value="{{ $user->name }}" readonly>
+            {{-- Header --}}
+            <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom">
+                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
+                    style="width:52px; height:52px; min-width:52px;">
+                    <span class="text-white fw-bold fs-4">
+                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                    </span>
                 </div>
-
-                <div class="mb-3">
-                    <label>Email</label>
-                    <input type="text" class="form-control" value="{{ $user->email }}" readonly>
+                <div>
+                    <div class="fw-semibold fs-5">{{ $user->name }}</div>
+                    <div class="text-muted small">{{ $user->jabatan }} &mdash; {{ $user->divisi }}</div>
                 </div>
+            </div>
 
-                <div class="mb-3">
-                    <label>No Telepon</label>
-                    <input type="text" class="form-control" value="{{ $user->phone }}" readonly>
+            {{-- Info --}}
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="text-muted small mb-1">Nama</label>
+                    <div class="fw-medium">{{ $user->name }}</div>
                 </div>
-
-                <div class="mb-3">
-                    <label>Jabatan</label>
-                    <input type="text" class="form-control" value="{{ $user->jabatan }}" readonly>
+                <div class="col-md-6">
+                    <label class="text-muted small mb-1">Email</label>
+                    <div class="fw-medium">{{ $user->email }}</div>
                 </div>
-
-                <div class="mb-3">
-                    <label>Divisi</label>
-                    <input type="text" class="form-control" value="{{ $user->divisi }}" readonly>
+                <div class="col-md-6">
+                    <label class="text-muted small mb-1">No Telepon</label>
+                    <div class="fw-medium">{{ $user->phone ?? '-' }}</div>
                 </div>
-
-                <div class="mb-3">
-                    <label>Bergabung</label>
-                    <input type="text" class="form-control" 
-                           value="{{ $user->created_at->format('d M Y') }}" readonly>
+                <div class="col-md-6">
+                    <label class="text-muted small mb-1">Jabatan</label>
+                    <div class="fw-medium">{{ $user->jabatan ?? '-' }}</div>
                 </div>
+                <div class="col-md-6">
+                    <label class="text-muted small mb-1">Divisi</label>
+                    <div class="fw-medium">{{ $user->divisi ?? '-' }}</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="text-muted small mb-1">Bergabung</label>
+                    <div class="fw-medium">{{ $user->created_at->format('d M Y') }}</div>
+                </div>
+            </div>
 
-                <!-- EDIT BUTTON -->
-                <a href="{{ route('profile.edit') }}" 
-                   class="btn w-100 text-white mt-3"
-                   style="background:#5c5757;">
-                    Edit Profile
+            {{-- Actions --}}
+            <div class="d-flex gap-2">
+                <a href="{{ route('profile.edit') }}"
+                   class="btn btn-dark px-4">
+                    <i class="bi bi-pencil me-1"></i> Edit Profile
                 </a>
-
-                <!-- LOGOUT BUTTON -->
-                <form action="{{ route('logout') }}" method="POST" class="mt-2">
+                <form action="{{ route('logout') }}" method="POST" class="m-0">
                     @csrf
-                    <button type="submit" class="btn btn-danger w-100">
-                        Logout
+                    <button type="submit" class="btn btn-outline-danger px-4">
+                        <i class="bi bi-box-arrow-right me-1"></i> Logout
                     </button>
                 </form>
-
             </div>
 
         </div>
     </div>
-
 </div>
 @endsection
