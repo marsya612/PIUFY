@@ -39,7 +39,7 @@
                     </div>
 
                 </div> -->
-                <div class="col-md-4 text-center">
+                <!-- <div class="col-md-4 text-center">
                     @if($user->photo)
                         <img id="previewImage"
                             src="{{ $user->photo }}" 
@@ -58,7 +58,7 @@
                     <div class="mt-3">
                         <input type="file" name="photo" class="form-control" accept="image/*" onchange="previewFoto(event)">
                     </div>
-                </div>
+                </div> -->
 
                 <!-- DATA -->
                 <div class="col-md-8">
