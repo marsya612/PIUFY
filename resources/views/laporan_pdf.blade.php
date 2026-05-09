@@ -129,28 +129,13 @@
 
 <!-- HEADER -->
 <div class="header">
-    <!-- <div class="logo">
-        <img src="{{ public_path('images/logo.png') }}">
-    </div> -->
-    <!-- <div class="logo">
-        @php
-            $logoPath = public_path('images/logo.png');
-            $logoBase64 = base64_encode(file_get_contents($logoPath));
-            $logoSrc = 'data:image/png;base64,' . $logoBase64;
-        @endphp
-        <img src="{{ $logoSrc }}" style="height:50px;">
-    </div> -->
     <div class="logo">
-        @php
-            $logoPath = public_path('images/logo.png');
-            $logoBase64 = base64_encode(file_get_contents($logoPath));
-            $logoSrc = 'data:image/png;base64,' . $logoBase64;
-        @endphp
-        <img src="{{ $logoSrc }}" style="height:50px;">
+        <span style="font-size: 28px; font-weight: 700; color: #13094d; letter-spacing: 4px; font-family: DejaVu Sans, sans-serif;">PIU<span style="color: #6b63c4;">FY</span></span>
+        <div style="height: 3px; width: 60px; background-color: #6b63c4; margin-top: 4px;"></div>
     </div>
 
     <div class="company">
-        <h2>PIUFY</h2>
+        <h2>PT Trocon Indah Perkasa</h2>
         <p>Laporan Piutang</p>
     </div>
 </div>
