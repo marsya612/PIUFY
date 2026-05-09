@@ -674,7 +674,7 @@ class PiutangController extends Controller
     
         $notifikasi = Piutang::where('status', '!=', 'lunas')
             ->where('user_id', Auth::id())
-            // ->where('is_dismissed', false)
+            ->where('is_dismissed', false)
             ->get()
             ->filter(function ($item) use ($today) {
                 $sisaHari = (int) $today->diffInDays(
@@ -723,11 +723,25 @@ class PiutangController extends Controller
     
     //     return redirect()->route('notifikasi')->with('success', 'Notifikasi dihapus');
     // }
+    // public function hapus($id)
+    // {
+    //     $notif = Piutang::findOrFail($id);
+    //     $notif->is_dismissed = true;
+    //     $notif->save();
+    
+    //     return redirect()->route('notifikasi')->with('success', 'Notifikasi dihapus');
+    // }
     public function hapus($id)
     {
         $notif = Piutang::findOrFail($id);
         $notif->is_dismissed = true;
-        $notif->save();
+        $result = $notif->save();
+        
+        \Log::info('Hapus notif', [
+            'id' => $id,
+            'is_dismissed' => $notif->is_dismissed,
+            'save_result' => $result
+        ]);
     
         return redirect()->route('notifikasi')->with('success', 'Notifikasi dihapus');
     }
