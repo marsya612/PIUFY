@@ -110,6 +110,8 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(`/laporan-data?from=${from}&to=${to}&status=${statusFilter}&klien=${klien}`)
             .then(res => res.json())
             .then(data => {
+                console.log('Data dari API:', data); // DEBUG
+
                 if (!Array.isArray(data) || data.length === 0) {
                     document.getElementById('tableBody').innerHTML =
                         `<tr><td colspan="4" class="text-center text-muted py-4">Data tidak ditemukan</td></tr>`;
@@ -127,6 +129,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!grouped[status]) grouped[status] = [];
                     grouped[status].push({ status, nama_klien: nama, nilai_tagihan: nilai });
                 });
+
+                console.log('Grouped:', grouped); // DEBUG
 
                 let html = '';
 
@@ -162,10 +166,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         </tr>
                     `;
 
+                    // ✅ PERBAIKAN: totalQty & totalNilai diupdate di dalam forEach
                     totalQty += subtotalQty;
                     totalNilai += subtotalNilai;
-                });
+                }); // ✅ tutup Object.keys forEach dulu
 
+                // ✅ PERBAIKAN: baris TOTAL ditambahkan ke html SEBELUM set innerHTML
                 html += `
                     <tr style="background-color:#13094d;">
                         <td colspan="2" style="color:white;font-weight:700;font-size:13px;">
@@ -178,6 +184,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     </tr>
                 `;
 
+                console.log('totalQty:', totalQty, '| totalNilai:', totalNilai); // DEBUG
+                console.log('HTML final:', html); // DEBUG
+
+                // ✅ PERBAIKAN: innerHTML di-set PALING AKHIR setelah html lengkap
                 document.getElementById('tableBody').innerHTML = html;
             })
             .catch(err => {
