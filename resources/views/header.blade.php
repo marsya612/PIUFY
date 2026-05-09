@@ -13,10 +13,9 @@
 
         <!-- RIGHT: Notification + User -->
         <div class="d-flex align-items-center gap-3">
-
-            <!-- Notification -->
+            
+            {{-- Notification --}}
             <a href="{{ route('notifikasi') }}" class="position-relative text-decoration-none notif-bell">
-                
                 @php
                     $today = now()->startOfDay();
                     $jumlahNotif = \App\Models\Piutang::where('status', '!=', 'lunas')
@@ -31,72 +30,28 @@
                             return in_array($sisaHari, [7, 5, 3]);
                         })->count();
                 @endphp
-            
+        
                 @if($jumlahNotif > 0)
                     <i class="bi bi-bell-fill notif-bell-icon"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                          style="font-size: 10px;">
+                        {{ $jumlahNotif }}
+                    </span>
                 @else
                     <i class="bi bi-bell notif-bell-icon"></i>
                 @endif
-            
-                @if($jumlahNotif > 0)
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                          style="font-size: 10px;">
-                        {{ $jumlahNotif }}
-                    </span>
-                @endif
             </a>
-            <!-- <a href="{{ route('notifikasi') }}" class="position-relative text-decoration-none">
-                <span style="font-size: 18px;">🔔</span>
-                
-                @php
-                    $today = now()->startOfDay();
-                    $jumlahNotif = \App\Models\Piutang::where('status', '!=', 'lunas')
-                        ->where('user_id', Auth::id())
-                        ->where('is_read', false) // ← pakai database
-                        ->get()
-                        ->filter(function ($item) use ($today) {
-                            $sisaHari = (int) $today->diffInDays(
-                                \Carbon\Carbon::parse($item->tanggal_jatuh_tempo)->startOfDay(),
-                                false
-                            );
-                            return in_array($sisaHari, [7, 5, 3]);
-                        })->count();
-                @endphp
-            
-                @if($jumlahNotif > 0)
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                          style="font-size: 10px;">
-                        {{ $jumlahNotif }}
-                    </span>
-                @endif
-            </a> -->
-
-            <!-- User Info -->
-            <!-- <a href="{{ route('profile') }}" class="text-decoration-none text-dark">
-                <div class="d-flex align-items-center bg-light px-3 py-1 rounded-pill profile-hover">
-
-                    @if(auth()->user()->photo)
-                        <img src="{{ asset('storage/' . auth()->user()->photo) }}"
-                            class="rounded-circle me-2 profile-img"
-                            style="width:30px; height:30px; object-fit:cover;">
-                    @else
-                        <span class="me-2">👤</span>
-                    @endif
-
-                    <span class="fw-medium">
-                        {{ auth()->user()->name ?? 'User' }}
-                    </span>
-
-                </div>
-            </a> -->
-            <a href="{{ route('profile') }}" class="text-decoration-none text-dark">
-                <div class="d-flex align-items-center bg-light px-3 py-1 rounded-pill profile-hover">
-                    <span class="fw-medium">
+        
+            {{-- Profile --}}
+            <a href="{{ route('profile') }}" class="text-decoration-none text-white">
+                <div class="d-flex align-items-center px-3 py-1 rounded-pill profile-hover"
+                     style="border: 1px solid rgba(255,255,255,0.3);">
+                    <span class="fw-medium" style="font-size: 14px;">
                         {{ auth()->user()->name ?? 'User' }}
                     </span>
                 </div>
             </a>
-
+        
         </div>
 
     </div>
