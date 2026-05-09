@@ -21,13 +21,11 @@
 
         .left-panel .logo {
             margin-bottom: 3rem;
-            align-self: flex-start;
+            /* align-self: flex-start; */
+            align-self: center;
+            text-align: center;
         }
 
-        /* .left-panel .logo img {
-            height: 36px;
-            filter: brightness(0) invert(1);
-        } */
         .left-panel .logo img {
             height: 60px;
             width: auto;
