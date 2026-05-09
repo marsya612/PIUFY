@@ -47,13 +47,13 @@
             <a href="{{ route('profile') }}" class="text-decoration-none text-dark">
                 <div class="d-flex align-items-center bg-light px-3 py-1 rounded-pill profile-hover">
 
-                    @if(auth()->user()->photo)
+                    <!-- @if(auth()->user()->photo)
                         <img src="{{ asset('storage/' . auth()->user()->photo) }}"
                             class="rounded-circle me-2 profile-img"
                             style="width:30px; height:30px; object-fit:cover;">
                     @else
                         <span class="me-2">👤</span>
-                    @endif
+                    @endif -->
 
                     <span class="fw-medium">
                         {{ auth()->user()->name ?? 'User' }}
