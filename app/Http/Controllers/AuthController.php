@@ -195,15 +195,22 @@ class AuthController extends Controller
         ]);
     
         // 🔥 BUAT LINK VERIFIKASI
+        // $verificationUrl = URL::temporarySignedRoute(
+        //     'verification.verify',
+        //     now()->addMinutes(60),
+        //     [
+        //         'id' => $user->id,
+        //         'hash' => sha1($user->email),
+        //     ]
+        // );
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify',
-            now()->addMinutes(60),
+            Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
             [
                 'id' => $user->id,
-                'hash' => sha1($user->email),
+                'hash' => sha1($user->getEmailForVerification()),
             ]
         );
-    
         // 🔥 KIRIM EMAIL KE USER
         Http::withHeaders([
             'api-key' => env('MAIL_PASSWORD'),
