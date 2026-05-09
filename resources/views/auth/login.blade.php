@@ -27,7 +27,7 @@
         }
 
         .left-panel .logo img {
-            height: 60px;
+            height: 90px;
             width: auto;
             max-width: 200px;
             filter: brightness(0) invert(1);
