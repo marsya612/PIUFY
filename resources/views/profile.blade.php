@@ -11,7 +11,7 @@
         <div class="row align-items-center">
 
             <!-- FOTO -->
-            <div class="col-md-4 text-center">
+            <!-- <div class="col-md-4 text-center">
                 @if($user->photo)
                     <img src="{{ $user->photo }}" 
                          alt="foto profil" 
@@ -23,7 +23,7 @@
                         <i class="bi bi-person" style="font-size:80px; color:#bbb;"></i>
                     </div>
                 @endif
-            </div>
+            </div> -->
 
             <!-- DATA -->
             <div class="col-md-8">
