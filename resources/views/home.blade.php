@@ -13,7 +13,7 @@ function rupiah($angka){
 <div class="container-fluid p-4">
 
     <h3 class="fw-semibold">Dashboard Monitoring Piutang</h3>
-    <p class="text-muted mb-4">Selamat datang, PT Trocon Indah Perkasa</p>
+    <p class="text-muted mb-4">Selamat datang, {{ Auth::user()->name }}</p>
 
     <!-- CARDS -->
     <div class="row g-3 mb-4">
