@@ -149,7 +149,7 @@ class AuthController extends Controller
                       <!-- Footer -->
                       <tr>
                         <td style='padding:24px 40px;border-top:1px solid #e2e8f0;text-align:center;'>
-                          <p style='margin:0;color:#a0aec0;font-size:12px;'>© 2026 Piufy · Piutang Management System</p>
+                          <p style='margin:0;color:#a0aec0;font-size:12px;'>© 2026 Piufy - Binalatifan. All rights reserved</p>
                         </td>
                       </tr>
             
