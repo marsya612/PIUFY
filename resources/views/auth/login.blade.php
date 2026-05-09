@@ -206,8 +206,8 @@
     <div class="logo">
         <img src="{{ asset('images/logo.png') }}" alt="Piufy">
     </div>
-    <div>
-        <div class="badge-pill">✦ Piutang Management System</div>
+    <div class="badge-pill" style="align-self: center;">✦ Piutang Management System</div>
+    <div style="text-align: left;">
         <h1>Kelola piutang<br>lebih mudah<br>& efisien.</h1>
         <p>Monitor tagihan, pantau jatuh tempo, dan kelola laporan keuangan dalam satu platform.</p>
     </div>
