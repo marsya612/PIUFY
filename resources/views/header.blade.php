@@ -3,8 +3,11 @@
     <div class="d-flex align-items-center justify-content-between">
 
         <!-- LEFT: Logo -->
-        <div class="d-flex align-items-center">
+        <!-- <div class="d-flex align-items-center">
             <h5 class="mb-0 fw-bold">piufy</h5>
+        </div> -->
+        <div class="d-flex align-items-center">
+            <img src="{{ asset('images/logo.png') }}" alt="Piufy" style="height: 32px;">
         </div>
 
 
