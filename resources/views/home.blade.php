@@ -16,41 +16,6 @@ function rupiah($angka){
     <p class="text-muted mb-4">Selamat datang, PT Trocon Indah Perkasa</p>
 
     <!-- CARDS -->
-    <!-- <div class="row g-3 mb-4">
-
-        <div class="col-md-3">
-            <div class="p-3 bg-light rounded-3">
-                <small class="text-muted">Total Piutang</small>
-                <h5 class="fw-bold">{{ rupiah($totalPiutang) }}</h5>
-                <span class="badge bg-white text-dark">{{ $totalTagihanAktif }} Tagihan Aktif</span>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="p-3 bg-light rounded-3">
-                <small class="text-muted">Tertunggak</small>
-                <h5 class="fw-bold">{{ rupiah($totalTertunggak) }}</h5>
-                <span class="badge bg-white text-dark">{{ $countTertunggak }} Tagihan</span>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="p-3 bg-light rounded-3">
-                <small class="text-muted">Jatuh Tempo ≤ 7 Hari</small>
-                <h5 class="fw-bold">{{ rupiah($totalJatuhTempo) }}</h5>
-                <span class="badge bg-white text-dark">{{ $countJatuhTempo }} Tagihan</span>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="p-3 bg-light rounded-3">
-                <small class="text-muted">Lunas Bulan Ini</small>
-                <h5 class="fw-bold">{{ rupiah($totalLunas) }}</h5>
-                <span class="badge bg-white text-dark">{{ $countLunas }} Tagihan</span>
-            </div>
-        </div>
-
-    </div> -->
     <div class="row g-3 mb-4">
         <div class="col-md-3">
             <div class="p-3 rounded-3" style="background: white; box-shadow: 0 4px 16px rgba(106,99,196,0.15); border-left: 4px solid #6b63c4;">
@@ -90,120 +55,104 @@ function rupiah($angka){
         </div>
     </div>
 
-    <div class="row g-4">
 
         <!-- TABLE -->
-
-<div class="col-lg-7">
-    <div class="card border-0 shadow-sm">
-        <div class="card-body">
-
-            <h5 class="fw-semibold">Ringkasan Status Piutang</h5>
-
-            <div class="table-responsive mt-3">
-                <table class="table align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>No Tagihan</th>
-                            <th>Proyek</th>
-                            <th>Nilai</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @forelse($latest as $item)
-                        <tr>
-                            <td>
-                                {{ $item->no_tagihan }} <br>
-                                <small class="text-muted">
-                                    {{ $item->nama_klien }}
-                                </small>
-                            </td>
-
-                            <td>{{ $item->nama_proyek }}</td>
-
-                            <td>
-                                Rp {{ number_format($item->nilai_tagihan ?? 0, 0, ',', '.') }}
-                            </td>
-
-                            <td>
-                                @if($item->status_label == 'tertunggak')
-                                    <span class="badge bg-danger">Tertunggak</span>
-
-                                @elseif($item->status_label == 'segera')
-                                    <span class="badge bg-warning text-dark">Segera</span>
-
-                                @elseif($item->status_label == 'jatuh_tempo')
-                                    <span class="badge bg-info text-dark">Jatuh Tempo</span>
-
-                                @elseif($item->status_label == 'belum')
-                                    <span class="badge bg-secondary">Belum Tempo</span>
-
-                                @else
-                                    <span class="badge bg-success">Lunas</span>
-                                @endif
-
-                                <br>
-<small class="text-muted">
-    @if($item->status_label == 'lunas')
-        Sudah dibayar
-    @elseif($item->sisaHari < 0)
-        Terlambat {{ abs($item->sisaHari) }} hari
-    @else
-        {{ $item->sisaHari }} hari lagi
-    @endif
-</small>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="4" class="text-center text-muted">
-                                Tidak ada data piutang
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-
-                </table>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-        <!-- RIGHT -->
-        <div class="col-lg-5">
-
-            <div class="card border-0 shadow-sm mb-3">
+    <div class="row g-4">
+        {{-- TABLE --}}
+        <div class="col-lg-7">
+            <div class="card border-0 rounded-3" style="box-shadow: 0 4px 16px rgba(19,9,77,0.08);">
                 <div class="card-body">
-                    <h6 class="fw-semibold">Persentase Penagihan</h6>
-
-                    <div class="mt-3">
-
-                        <div class="d-flex justify-content-between small">
-                            <span>Lunas</span>
-                            <span>{{ round($persenLunas) }}%</span>
-                        </div>
-                        <div class="progress mb-3">
-                            <div class="progress-bar bg-success" style="width:{{ $persenLunas }}%"></div>
-                        </div>
-
-                        <div class="d-flex justify-content-between small">
-                            <span>Tertunggak</span>
-                            <span>{{ round($persenTertunggak) }}%</span>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar bg-danger" style="width:{{ $persenTertunggak }}%"></div>
-                        </div>
-
+                    <h5 class="fw-semibold" style="color: #13094d;">Ringkasan Status Piutang</h5>
+                    <div class="table-responsive mt-3">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr style="border-bottom: 2px solid #eeedfb;">
+                                    <th style="color: #6b63c4; font-size: 13px; font-weight: 600;">No Tagihan</th>
+                                    <th style="color: #6b63c4; font-size: 13px; font-weight: 600;">Proyek</th>
+                                    <th style="color: #6b63c4; font-size: 13px; font-weight: 600;">Nilai</th>
+                                    <th style="color: #6b63c4; font-size: 13px; font-weight: 600;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($latest as $item)
+                                <tr style="border-bottom: 1px solid #f3f2fd;">
+                                    <td>
+                                        <span class="fw-medium" style="color: #13094d;">{{ $item->no_tagihan }}</span><br>
+                                        <small class="text-muted">{{ $item->nama_klien }}</small>
+                                    </td>
+                                    <td style="color: #444;">{{ $item->nama_proyek }}</td>
+                                    <td style="color: #2d2580; font-weight: 600;">
+                                        Rp {{ number_format($item->nilai_tagihan ?? 0, 0, ',', '.') }}
+                                    </td>
+                                    <td>
+                                        @if($item->status_label == 'tertunggak')
+                                            <span class="badge rounded-pill" style="background-color: #fdecea; color: #922b21;">Tertunggak</span>
+                                        @elseif($item->status_label == 'segera')
+                                            <span class="badge rounded-pill" style="background-color: #fef9e7; color: #9a6a00;">Segera</span>
+                                        @elseif($item->status_label == 'jatuh_tempo')
+                                            <span class="badge rounded-pill" style="background-color: #eaf4fb; color: #1a6a9a;">Jatuh Tempo</span>
+                                        @elseif($item->status_label == 'belum')
+                                            <span class="badge rounded-pill" style="background-color: #f3f2fd; color: #6b63c4;">Belum Tempo</span>
+                                        @else
+                                            <span class="badge rounded-pill" style="background-color: #eafaf1; color: #145a32;">Lunas</span>
+                                        @endif
+                                        <br>
+                                        <small class="text-muted">
+                                            @if($item->status_label == 'lunas')
+                                                Sudah dibayar
+                                            @elseif($item->sisaHari < 0)
+                                                Terlambat {{ abs($item->sisaHari) }} hari
+                                            @else
+                                                {{ $item->sisaHari }} hari lagi
+                                            @endif
+                                        </small>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-4">
+                                        Tidak ada data piutang
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-
-
         </div>
-
+    
+        {{-- RIGHT --}}
+        <div class="col-lg-5">
+            <div class="card border-0 rounded-3" style="box-shadow: 0 4px 16px rgba(19,9,77,0.08);">
+                <div class="card-body">
+                    <h6 class="fw-semibold mb-4" style="color: #13094d;">Persentase Penagihan</h6>
+    
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span style="font-size: 13px; color: #444;">Lunas</span>
+                            <span style="font-size: 13px; font-weight: 600; color: #145a32;">{{ round($persenLunas) }}%</span>
+                        </div>
+                        <div class="progress rounded-pill" style="height: 8px; background-color: #eafaf1;">
+                            <div class="progress-bar rounded-pill" 
+                                 style="width:{{ $persenLunas }}%; background-color: #1e8449;"></div>
+                        </div>
+                    </div>
+    
+                    <div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span style="font-size: 13px; color: #444;">Tertunggak</span>
+                            <span style="font-size: 13px; font-weight: 600; color: #922b21;">{{ round($persenTertunggak) }}%</span>
+                        </div>
+                        <div class="progress rounded-pill" style="height: 8px; background-color: #fdecea;">
+                            <div class="progress-bar rounded-pill" 
+                                 style="width:{{ $persenTertunggak }}%; background-color: #c0392b;"></div>
+                        </div>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
