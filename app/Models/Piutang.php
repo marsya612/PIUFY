@@ -20,19 +20,34 @@ class Piutang extends Model
     //     'catatan',
     //     'status', // 🔥 WAJIB TAMBAH INI
     // ];
+//     protected $fillable = [
+//     'user_id',
+//     'no_tagihan',
+//     'nama_klien',
+//     'nama_proyek',
+//     'termin',
+//     'nilai_tagihan',
+//     'metode_pembayaran',
+//     'tanggal_terbit',
+//     'tanggal_jatuh_tempo',
+//     'status',
+//     'catatan',
+// ];
     protected $fillable = [
-    'user_id',
-    'no_tagihan',
-    'nama_klien',
-    'nama_proyek',
-    'termin',
-    'nilai_tagihan',
-    'metode_pembayaran',
-    'tanggal_terbit',
-    'tanggal_jatuh_tempo',
-    'status',
-    'catatan',
-];
+        'user_id',
+        'no_tagihan',
+        'nama_klien',
+        'nama_proyek',
+        'termin',
+        'nilai_tagihan',
+        'metode_pembayaran',
+        'tanggal_terbit',
+        'tanggal_jatuh_tempo',
+        'status',
+        'catatan',
+        'is_read',        // ← tambahkan
+        'is_dismissed',   // ← tambahkan
+    ];
 
 
     public function getStatusAttribute($value)
