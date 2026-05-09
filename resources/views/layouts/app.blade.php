@@ -129,7 +129,7 @@
         .profile-hover:active {
             transform: scale(0.96);
         } */
-        .profile-hover {
+        /* .profile-hover {
             transition: all 0.2s ease;
             cursor: pointer;
         }
@@ -149,6 +149,32 @@
         
         .notif-bell:hover {
             color: #212529 !important;
+        }
+        
+        .notif-bell-icon {
+            font-size: 20px;
+        } */
+        .profile-hover {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .profile-hover:hover {
+            background-color: rgba(255,255,255,0.15);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        
+        .profile-hover:active {
+            transform: scale(0.96);
+        }
+        
+        .notif-bell {
+            color: rgba(255,255,255,0.7);
+            transition: color 0.2s;
+        }
+        
+        .notif-bell:hover {
+            color: #ffffff !important;
         }
         
         .notif-bell-icon {
