@@ -11,6 +11,21 @@ use App\Models\User;
 use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\AuthController;
 
+use Illuminate\Support\Facades\URL;
+
+Route::get('/test-signature', function() {
+    $url = URL::temporarySignedRoute(
+        'verification.verify',
+        now()->addMinutes(60),
+        ['id' => 1, 'hash' => sha1('test@email.com')]
+    );
+    
+    dd([
+        'generated_url' => $url,
+        'app_url' => config('app.url'),
+    ]);
+});
+
 
 /*
 |--------------------------------------------------------------------------
