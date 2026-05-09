@@ -90,6 +90,33 @@ function bacaNotif(id) {
 //     })
 //     .catch(error => console.error('Error:', error));
 // }
+// function hapusNotif(id) {
+//     if (!confirm('Hapus notifikasi ini?')) return;
+//     const token = document.querySelector('meta[name="csrf-token"]');
+//     fetch(`/notifikasi/hapus/${id}`, {
+//         method: 'DELETE',
+//         headers: {
+//             'X-CSRF-TOKEN': token ? token.getAttribute('content') : '{{ csrf_token() }}',
+//             'Content-Type': 'application/json'
+//         }
+//     })
+//     .then(response => response.json())  // ← parse dulu
+//     .then(data => {
+//         if (data.success) {             // ← cek dari data, bukan response
+//             const el = document.getElementById(`notif-${id}`);
+//             if (el) {
+//                 el.remove();
+//                 const cardBody = document.querySelector('.card-body');
+//                 if (!cardBody.querySelector('[id^="notif-"]')) {
+//                     cardBody.innerHTML = '<div class="text-center text-muted">Tidak ada notifikasi</div>';
+//                 }
+//             } else {
+//                 console.error('Element tidak ditemukan: notif-' + id);
+//             }
+//         }
+//     })
+//     .catch(error => console.error('Error:', error));
+// }
 function hapusNotif(id) {
     if (!confirm('Hapus notifikasi ini?')) return;
     const token = document.querySelector('meta[name="csrf-token"]');
@@ -100,18 +127,21 @@ function hapusNotif(id) {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => response.json())  // ← parse dulu
+    .then(response => {
+        console.log('Status code:', response.status); // ← cek ini
+        return response.json();
+    })
     .then(data => {
-        if (data.success) {             // ← cek dari data, bukan response
+        console.log('Data dari server:', data); // ← cek ini
+        if (data.success) {
             const el = document.getElementById(`notif-${id}`);
+            console.log('Element ditemukan:', el); // ← cek ini
             if (el) {
                 el.remove();
                 const cardBody = document.querySelector('.card-body');
                 if (!cardBody.querySelector('[id^="notif-"]')) {
                     cardBody.innerHTML = '<div class="text-center text-muted">Tidak ada notifikasi</div>';
                 }
-            } else {
-                console.error('Element tidak ditemukan: notif-' + id);
             }
         }
     })
