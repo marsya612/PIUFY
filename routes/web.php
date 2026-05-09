@@ -11,6 +11,11 @@ use App\Models\User;
 use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\AuthController;
 
+
+Route::get('/run-migrate', function () {
+    Artisan::call('migrate', ['--force' => true]);
+    return Artisan::output();
+});
 /*
 |--------------------------------------------------------------------------
 | GUEST ROUTES
