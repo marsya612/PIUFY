@@ -7,7 +7,7 @@
             <h5 class="mb-0 fw-bold">piufy</h5>
         </div> -->
         <div class="d-flex align-items-center">
-            <img src="{{ asset('images/logo.png') }}" alt="Piufy" style="height: 32px;">
+            <img src="{{ asset('images/logo.png') }}" alt="Piufy" style="height: 40px; width: auto;">
         </div>
 
 
